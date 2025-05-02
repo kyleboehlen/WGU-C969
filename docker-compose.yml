@@ -1,0 +1,18 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: wgud969-mysql-server
+    environment:
+      MYSQL_ROOT_PASSWORD: Passw0rd!
+      MYSQL_DATABASE: client_schedule
+      MYSQL_USER: sqlUser
+      MYSQL_PASSWORD: Passw0rd!
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    restart: always
+
+volumes:
+  mysql-data:
+    driver: local
