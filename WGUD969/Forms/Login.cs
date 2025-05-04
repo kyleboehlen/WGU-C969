@@ -15,11 +15,9 @@ namespace WGUD969.Forms
 {
     public partial class Login : Form
     {
-        public Login(IMySqlConnectionFactory mySqlConnectionFactory)
+        public Login()
         {
             InitializeComponent();
-            MySqlConnection conn = mySqlConnectionFactory.CreateConnection();
-            conn.Open();
         }
     }
 }

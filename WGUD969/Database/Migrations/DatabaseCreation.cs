@@ -1,0 +1,95 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace WGUD969.Database.Migrations
+{
+    public static class DatabaseCreation
+    {
+        public static string Query = @"
+            -- Country Table
+            CREATE TABLE IF NOT EXISTS country (
+                countryId INT(10) AUTO_INCREMENT PRIMARY KEY,
+                country VARCHAR(50) NOT NULL,
+                createDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                createdBy VARCHAR(40) NOT NULL,
+                lastUpdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                lastUpdateBy VARCHAR(40) NOT NULL
+            );
+
+            -- City Table
+            CREATE TABLE IF NOT EXISTS city (
+                cityId INT(10) AUTO_INCREMENT PRIMARY KEY,
+                city VARCHAR(50) NOT NULL,
+                countryId INT(10) NOT NULL,
+                createDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                createdBy VARCHAR(40) NOT NULL,
+                lastUpdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                lastUpdateBy VARCHAR(40) NOT NULL,
+                FOREIGN KEY (countryId) REFERENCES country(countryId)
+            );
+
+            -- Address Table
+            CREATE TABLE IF NOT EXISTS address (
+                addressId INT(10) AUTO_INCREMENT PRIMARY KEY,
+                address VARCHAR(50) NOT NULL,
+                address2 VARCHAR(50),
+                cityId INT(10) NOT NULL,
+                postalCode VARCHAR(10) NOT NULL,
+                phone VARCHAR(20) NOT NULL,
+                createDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                createdBy VARCHAR(40) NOT NULL,
+                lastUpdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                lastUpdateBy VARCHAR(40) NOT NULL,
+                FOREIGN KEY (cityId) REFERENCES city(cityId)
+            );
+
+            -- User Table
+            CREATE TABLE IF NOT EXISTS user (
+                userId INT AUTO_INCREMENT PRIMARY KEY,
+                userName VARCHAR(50) NOT NULL UNIQUE,
+                password VARCHAR(255) NOT NULL,
+                active TINYINT(1) NOT NULL DEFAULT 1,
+                createDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                createdBy VARCHAR(40) NOT NULL,
+                lastUpdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                lastUpdateBy VARCHAR(40) NOT NULL
+            );
+
+            -- Customer Table
+            CREATE TABLE IF NOT EXISTS customer (
+                customerId INT(10) AUTO_INCREMENT PRIMARY KEY,
+                customerName VARCHAR(45) NOT NULL,
+                addressId INT(10) NOT NULL,
+                active TINYINT(1) NOT NULL DEFAULT 1,
+                createDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                createdBy VARCHAR(40) NOT NULL,
+                lastUpdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                lastUpdateBy VARCHAR(40) NOT NULL,
+                FOREIGN KEY (addressId) REFERENCES address(addressId)
+            );
+
+            -- Appointment Table
+            CREATE TABLE IF NOT EXISTS appointment (
+                appointmentId INT(10) AUTO_INCREMENT PRIMARY KEY,
+                customerId INT(10) NOT NULL,
+                userId INT NOT NULL,
+                title VARCHAR(255) NOT NULL,
+                description TEXT,
+                location TEXT,
+                contact TEXT,
+                type TEXT,
+                url VARCHAR(255),
+                start DATETIME NOT NULL,
+                end DATETIME NOT NULL,
+                createDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                createdBy VARCHAR(40) NOT NULL,
+                lastUpdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                lastUpdateBy VARCHAR(40) NOT NULL,
+                FOREIGN KEY (customerId) REFERENCES customer(customerId),
+                FOREIGN KEY (userId) REFERENCES user(userId)
+            );";
+    }
+}

@@ -22,11 +22,6 @@ namespace WGUD969.Factories
         public MySqlConnection CreateConnection()
         {
             var connString = _configuration.GetConnectionString("SchedulingDatabase");
-            var connectionStrings = _configuration.GetSection("ConnectionStrings").GetChildren();
-            foreach (var connectionString in connectionStrings)
-            {
-                Debug.WriteLine($"Key: {connectionString.Key}, Value: {connectionString.Value}");
-            }
 
             return new MySqlConnection(connString);
         }
