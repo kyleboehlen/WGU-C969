@@ -18,11 +18,15 @@ namespace WGUD969.Services
     public class AuthService : IAuthService
     {
         private readonly IUserRepository _UserRepository;
+        private readonly IExceptionHandlingService _ExceptionHandler;
+        private readonly ILoggingService _Logger;
         public IUser? User { get; private set; } = null;
 
-        public AuthService(IUserRepository userRepository)
+        public AuthService(IUserRepository userRepository, IExceptionHandlingService exceptionHandler, ILoggingService logger)
         {
             _UserRepository = userRepository;
+            _ExceptionHandler = exceptionHandler;
+            _Logger = logger;
         }
 
         public async Task<bool> LoginAsync(string username, string pwd)
@@ -34,6 +38,15 @@ namespace WGUD969.Services
             {
                 User = user;
             }
+
+            // Also, logger can't handle using the exception handler cuz.. DI deadlock 
+            await _ExceptionHandler.ExecuteAsync(
+                async () =>
+                {
+                    await _Logger.LogToFileWithTimestamp("Login_History", $"{username} login attempt {(IsAuthenticated ? "successful" : "failed")}.");
+                },
+                "AuthService.LoginAsync()"
+            );
 
             // We only set a user if we get one by username, and the password matches, to utilizing IsAuthenticated is good here
             return IsAuthenticated;

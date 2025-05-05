@@ -5,12 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace WGUD969.Services
 {
     public interface ILoggingService
     {
         void LogError(string message);
+        Task LogToFileWithTimestamp(string fileName, string username);
     }
     public class LoggingService : ILoggingService
     {
@@ -19,6 +21,18 @@ namespace WGUD969.Services
         public void LogError(string message)
         {
             Debug.WriteLine(message);
+        }
+
+        // Arguably we need a FileService right? :P
+        public async Task LogToFileWithTimestamp(string fileName, string message)
+        {
+            string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            string logEntry = $"{timestamp} - {message}";
+
+            using (StreamWriter writer = new StreamWriter($"{fileName}.txt", append: true))
+            {
+                await writer.WriteLineAsync(logEntry);
+            }
         }
     }
 }

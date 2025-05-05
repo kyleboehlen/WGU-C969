@@ -96,7 +96,7 @@ namespace WGUD969.Forms
             }
             else
             {
-                 _ServiceProvider.GetRequiredService<Dashboard>().Show();
+                _ServiceProvider.GetRequiredService<Dashboard>().Show();
                 Hide();
             }
         }
