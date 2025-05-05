@@ -18,15 +18,7 @@ namespace WGUD969
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
-        //static void Main()
-        //{
-        //    // To customize application configuration such as set high DPI settings or default font,
-        //    // see https://aka.ms/applicationconfiguration.
-        //    ApplicationConfiguration.Initialize();
-        //    Application.Run(new Login());
-        //}
-
-        static void Main()
+        static async Task Main()
         {
             var services = new ServiceCollection();
             ConfigureServices(services);
@@ -36,8 +28,7 @@ namespace WGUD969
             Application.SetCompatibleTextRenderingDefault(false);
             ApplicationConfiguration.Initialize();
 
-            // Startup service is in charge of creating the database tables and setting the test user
-            ServiceProvider.GetRequiredService<IStartupService>().InitializeAsync();
+            await ServiceProvider.GetRequiredService<IStartupService>().InitializeAsync();
 
             // The Login form will be the entry point to the application
             Application.Run(ServiceProvider.GetRequiredService<Login>());
@@ -57,10 +48,13 @@ namespace WGUD969
 
             // SERVICES
             services.AddTransient<IStartupService, StartupService>();
-            services.AddSingleton<IAuthService, AuthService>();
+            services.AddSingleton<IAuthService, AuthService>(); // The auth service as a singleton means there can only be ONE authenticated User
             services.AddSingleton<ILoggingService, LoggingService>();
             services.AddSingleton<IExceptionHandlingService, ExceptionHandlingService>();
             services.AddSingleton<IDTOMappingService<UserDTO>, DTOMappingService<UserDTO>>();
+            services.AddSingleton<ILocationService, LocationService>();
+            services.AddSingleton<ITranslationService, TranslationService>();
+            services.AddSingleton<ICryptographyService, CryptographyService>();
 
             // DATA ACCESS LAYER
             services.AddSingleton<IMySqlConnectionFactory, MySqlConnectionFactory>();
@@ -75,11 +69,15 @@ namespace WGUD969
 
             // FACTORIES
             services.AddSingleton<UserFactory>();
-            services.AddSingleton<IUserFactory>(provider =>  provider.GetRequiredService<UserFactory>());
-            services.AddSingleton<IDefaultDTOFactory<UserDTO>>(provider =>  provider.GetRequiredService<UserFactory>());
+            services.AddTransient<IUserFactory>(provider =>  provider.GetRequiredService<UserFactory>());
+            services.AddTransient<IDefaultDTOFactory<UserDTO>>(provider =>  provider.GetRequiredService<UserFactory>());
+
+            // Models
+            services.AddTransient<IUser, User>();
 
             // FORMS
             services.AddTransient<Login>();
+            services.AddTransient<Dashboard>();
         }
     }
 }

@@ -1,47 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using WGUD969.Database.Repositories;
+using WGUD969.Models;
 
 namespace WGUD969.Services
 {
     public interface IAuthService
     {
-        string HashPassword(string pwd);
+        Task<bool> LoginAsync(string username, string pwd);
+        IUser? User { get; }
+        bool IsAuthenticated { get; }
     }
     public class AuthService : IAuthService
     {
-        private readonly IConfiguration _Configuration;
-        public AuthService(IConfiguration configuration)
+        private readonly IUserRepository _UserRepository;
+        public IUser? User { get; private set; } = null;
+
+        public AuthService(IUserRepository userRepository)
         {
-            _Configuration = configuration;
+            _UserRepository = userRepository;
         }
-        // Using SHA-256 with a hard coded salt is NOT considered adequite for modern password stores, however...
-        // No outside libraries are allowed in the ACs of this project, and I'm not paticularly interested in implementing BCrypt myself so...
-        // You get what you get and you don't throw a fit, beggars can't be choosers and all that
-        public string HashPassword(string pwd)
+
+        public async Task<bool> LoginAsync(string username, string pwd)
         {
-            string salt = _Configuration["PasswordSecurity:Salt"]
-                ?? throw new InvalidOperationException("Password salt not configured");
+            IUser? user = await _UserRepository.GetUserByUsername(username);
 
-            string saltedPassword = pwd + salt;
-
-            using (SHA256 sha256 = SHA256.Create())
+            // Do not move hashing to this service or you will have a DI deadlock
+            if (user != null && user.CheckPassword(pwd))
             {
-                byte[] bytes = Encoding.UTF8.GetBytes(saltedPassword);
-                byte[] hashBytes = sha256.ComputeHash(bytes);
-
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < hashBytes.Length; i++)
-                {
-                    builder.Append(hashBytes[i].ToString("x2"));
-                }
-
-                return builder.ToString();
+                User = user;
             }
+
+            // We only set a user if we get one by username, and the password matches, to utilizing IsAuthenticated is good here
+            return IsAuthenticated;
+        }
+
+        public bool IsAuthenticated
+        {
+            get { return User != null; }
         }
     }
 }

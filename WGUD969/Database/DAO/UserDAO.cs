@@ -142,8 +142,38 @@ namespace WGUD969.Database.DAO
 
         public async Task<IEnumerable<UserDTO>> GetAllAsync()
         {
-            // TODO
-            return new List<UserDTO>();
+            return await _ExceptionHandler.ExecuteAsync<IEnumerable<UserDTO>>(
+                async () =>
+                {
+                    var users = new List<UserDTO>();
+
+                    using (var connection = _ConnectionFactory.CreateConnection())
+                    {
+                        await connection.OpenAsync();
+
+                        string query = @"SELECT userId, userName, password, active, 
+                                createDate, createdBy, lastUpdate, lastUpdateBy 
+                                FROM user";
+
+                        using (var command = connection.CreateCommand())
+                        {
+                            command.CommandText = query;
+
+                            using (var reader = await command.ExecuteReaderAsync())
+                            {
+                                while (await reader.ReadAsync())
+                                {
+                                    var userDto = _DTOMapper.MapToDTO(reader);
+                                    users.Add(userDto);
+                                }
+                            }
+                        }
+                    }
+
+                    return users;
+                },
+                "UserDAO.GetAllAsync()"
+            );
         }
 
         public async Task<bool> DeleteByIdAsync(int id)

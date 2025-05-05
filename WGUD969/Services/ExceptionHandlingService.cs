@@ -19,11 +19,11 @@ namespace WGUD969.Services
 
     public class ExceptionHandlingService : IExceptionHandlingService
     {
-        private readonly ILoggingService _LoggingService;
+        private readonly ILoggingService _Logger;
 
         public ExceptionHandlingService(ILoggingService loggingService)
         {
-            _LoggingService = loggingService;
+            _Logger = loggingService;
         }
 
         public async Task<T> ExecuteAsync<T>(Func<Task<T>> operation, string operationDescription)
@@ -74,18 +74,18 @@ namespace WGUD969.Services
 
         private void LogMySqlException(MySqlException e, string operationDescription)
         {
-            _LoggingService.LogError($"MySQL Exception during {operationDescription}");
-            _LoggingService.LogError($"Error Number: {e.Number}");
-            _LoggingService.LogError($"Message: {e.Message}");
-            _LoggingService.LogError($"Stack trace: {e.StackTrace}");
+            _Logger.LogError($"MySQL Exception during {operationDescription}");
+            _Logger.LogError($"Error Number: {e.Number}");
+            _Logger.LogError($"Message: {e.Message}");
+            _Logger.LogError($"Stack trace: {e.StackTrace}");
         }
 
         private void LogException(Exception e, string operationDescription, string exceptionType)
         {
-            _LoggingService.LogError($"{exceptionType} Exception during {operationDescription}");
-            _LoggingService.LogError($"Type: {e.GetType().Name}");
-            _LoggingService.LogError($"Message: {e.Message}");
-            _LoggingService.LogError($"Stack trace: {e.StackTrace}");
+            _Logger.LogError($"{exceptionType} Exception during {operationDescription}");
+            _Logger.LogError($"Type: {e.GetType().Name}");
+            _Logger.LogError($"Message: {e.Message}");
+            _Logger.LogError($"Stack trace: {e.StackTrace}");
         }
     }
 }

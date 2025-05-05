@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using WGUD969.Database.DTO;
 using WGUD969.Models;
 using WGUD969.Services;
@@ -15,22 +16,28 @@ namespace WGUD969.Factories
     }
     public class UserFactory : IUserFactory, IDefaultDTOFactory<UserDTO>
     {
-        private IAuthService _AuthService;
-        public UserFactory(IAuthService authService)
+        private readonly IServiceProvider _ServiceProvider;
+        public UserFactory(IServiceProvider serviceProvider)
         {
-            _AuthService = authService;
+            _ServiceProvider = serviceProvider;
         }
 
         // For generating the test user for evaluations
         public IUser CreateDefaultEvaluationUser() {
-            return new User(new UserDTO
+            IUser defaultUser = _ServiceProvider.GetService<IUser>();
+            defaultUser.Initialize(new UserDTO
             {
                 userID = 1,
                 userName = "test",
-                password = _AuthService.HashPassword("test"),
+                password = "test",
                 createdBy = "IUserFactory",
                 lastUpdateBy = "IUserFactory",
             });
+
+            // Setting the password this way will hash it
+            defaultUser.SetNewPassword("test");
+
+            return defaultUser;
         }
 
         // For creating a UserDTO with default values that are required by the DTO

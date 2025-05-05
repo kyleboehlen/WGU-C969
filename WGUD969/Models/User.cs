@@ -8,7 +8,7 @@ using WGUD969.Services;
 
 namespace WGUD969.Models
 {
-    public interface IUser
+    public interface IUser : IModelToDTO<UserDTO>
     {
         int Id { get; }
         string Username { get; set; }
@@ -22,7 +22,7 @@ namespace WGUD969.Models
         void SetNewPassword(string pwd);
         void TouchUpdated(string updatedBy);
     }
-    public class User : IUser, IModelToDTO<UserDTO>
+    public class User : IUser
     {
         public int Id { get; private set; }
         public string Username { get; set; }
@@ -33,16 +33,11 @@ namespace WGUD969.Models
         public string CreatedBy { get; private set; }
         public string UpdatedBy { get; private set; }
 
-        private readonly IAuthService _AuthService;
+        private readonly ICryptographyService _CryptoService;
 
-        public User(UserDTO? dto = null, IAuthService authService = null)
+        public User(ICryptographyService cryptoService)
         {
-            _AuthService = authService;
-
-            if (dto != null)
-            {
-                Initialize(dto);
-            }
+            _CryptoService = cryptoService;
         }
 
         public void Initialize(UserDTO dto)
@@ -70,12 +65,12 @@ namespace WGUD969.Models
 
         public bool CheckPassword(string pwd)
         {
-            return _AuthService.HashPassword(pwd) == PasswordHash;
+            return _CryptoService.HashPassword(pwd) == PasswordHash;
         }
 
         public void SetNewPassword(string pwd)
         {
-            PasswordHash = _AuthService.HashPassword(pwd);
+            PasswordHash = _CryptoService.HashPassword(pwd);
         }
 
         public void TouchUpdated(string? updatedBy)
