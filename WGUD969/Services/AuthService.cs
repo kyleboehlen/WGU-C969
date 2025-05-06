@@ -48,7 +48,7 @@ namespace WGUD969.Services
                 "AuthService.LoginAsync()"
             );
 
-            // We only set a user if we get one by username, and the password matches, to utilizing IsAuthenticated is good here
+            // We only set a user if we get one by username, and the password matches, so utilizing IsAuthenticated is good here
             return IsAuthenticated;
         }
 

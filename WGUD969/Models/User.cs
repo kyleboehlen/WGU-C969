@@ -8,16 +8,11 @@ using WGUD969.Services;
 
 namespace WGUD969.Models
 {
-    public interface IUser : IModelToDTO<UserDTO>
+    public interface IUser : IModelToDTO<UserDTO>, IModelChangeAudit
     {
         int Id { get; }
         string Username { get; set; }
-        DateTime? CreatedOn { get; }
-        DateTime? UpdatedOn { get; }
-        string CreatedBy { get; }
-        string UpdatedBy { get; }
         public bool IsActive { get; set; }
-        void Initialize(UserDTO? dto);
         bool CheckPassword(string pwd);
         void SetNewPassword(string pwd);
         void TouchUpdated(string updatedBy);

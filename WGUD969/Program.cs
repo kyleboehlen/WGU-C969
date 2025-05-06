@@ -48,6 +48,7 @@ namespace WGUD969
 
             // SERVICES
             services.AddTransient<IStartupService, StartupService>();
+            services.AddTransient<IDatabaseMigrationService, DatabaseMigrationService>();
             services.AddSingleton<IAuthService, AuthService>(); // The auth service as a singleton means there can only be ONE authenticated User
             services.AddSingleton<ILoggingService, LoggingService>();
             services.AddSingleton<IExceptionHandlingService, ExceptionHandlingService>();
