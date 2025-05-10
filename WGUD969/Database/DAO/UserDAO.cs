@@ -36,7 +36,7 @@ namespace WGUD969.Database.DAO
                             (userID, userName, password, active, createDate, createdBy, lastUpdate, lastUpdateBy) 
                             VALUES 
                             (
-                                @userID, 
+                                @userId, 
                                 @userName, 
                                 @password, 
                                 COALESCE(@active, DEFAULT(active)), 
@@ -85,7 +85,7 @@ namespace WGUD969.Database.DAO
                         active = COALESCE(@Active, active),
                         lastUpdate = CURRENT_TIMESTAMP,
                         lastUpdateBy = @LastUpdateBy
-                    WHERE userId = @UserId";
+                    WHERE userId = @userId";
                         using (var command = connection.CreateCommand())
                         {
                             command.CommandText = query;

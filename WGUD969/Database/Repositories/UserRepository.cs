@@ -32,7 +32,7 @@ namespace WGUD969.Database.Repositories
             UserDTO userDTO = user.ToDTO();
 
             // We'll check whether a User already exists with that ID to determine whether we use a create or update operation
-            if (await _UserDAO.GetByIdAsync(userDTO.userID) != null)
+            if (await _UserDAO.GetByIdAsync(userDTO.userId) != null)
             {
                 await _UserDAO.UpdateAsync(userDTO);
             }

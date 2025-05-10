@@ -53,6 +53,8 @@ namespace WGUD969
             services.AddSingleton<ILoggingService, LoggingService>();
             services.AddSingleton<IExceptionHandlingService, ExceptionHandlingService>();
             services.AddSingleton<IDTOMappingService<UserDTO>, DTOMappingService<UserDTO>>();
+            services.AddSingleton<IDTOMappingService<CityDTO>, DTOMappingService<CityDTO>>();
+            services.AddSingleton<IDTOMappingService<CountryDTO>, DTOMappingService<CountryDTO>>();
             services.AddSingleton<ILocationService, LocationService>();
             services.AddSingleton<ITranslationService, TranslationService>();
             services.AddSingleton<ICryptographyService, CryptographyService>();
@@ -67,18 +69,32 @@ namespace WGUD969
 
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IDAO<UserDTO>, UserDAO>();
+            services.AddTransient<ICityRepository, CityRepository>();
+            services.AddTransient<IDAO<CityDTO>, CityDAO>();
+            services.AddTransient<ICountryRepository, CountryRepository>();
+            services.AddTransient<IDAO<CountryDTO>, CountryDAO>();
 
             // FACTORIES
             services.AddSingleton<UserFactory>();
             services.AddTransient<IUserFactory>(provider =>  provider.GetRequiredService<UserFactory>());
             services.AddTransient<IDefaultDTOFactory<UserDTO>>(provider =>  provider.GetRequiredService<UserFactory>());
+            services.AddSingleton<CityFactory>();
+            services.AddTransient<ICityFactory>(provider => provider.GetRequiredService<CityFactory>());
+            services.AddTransient<IDefaultDTOFactory<CityDTO>>(provider => provider.GetRequiredService<CityFactory>());
+            services.AddSingleton<CountryFactory>();
+            services.AddTransient<ICountryFactory>(provider => provider.GetRequiredService<CountryFactory>());
+            services.AddTransient<IDefaultDTOFactory<CountryDTO>>(provider => provider.GetRequiredService<CountryFactory>());
 
             // Models
             services.AddTransient<IUser, User>();
+            services.AddTransient<ICountry, Country>();
+            services.AddTransient<ICity, City>();
 
             // FORMS
             services.AddTransient<Login>();
             services.AddTransient<Dashboard>();
+            services.AddTransient<CityForm>();
+            services.AddTransient<Appointment>();
         }
     }
 }

@@ -37,7 +37,7 @@ namespace WGUD969.Models
 
         public void Initialize(UserDTO dto)
         {
-            Id = dto.userID;
+            Id = dto.userId;
             Username = dto.userName;
             PasswordHash = dto.password;
             _IsActive = dto.active ?? false;
@@ -81,7 +81,7 @@ namespace WGUD969.Models
         {
             return new UserDTO
             {
-                userID = Id,
+                userId = Id,
                 userName = Username,
                 password = PasswordHash,
                 createdBy = CreatedBy,

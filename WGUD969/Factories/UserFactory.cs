@@ -10,11 +10,11 @@ using WGUD969.Services;
 
 namespace WGUD969.Factories
 {
-    public interface IUserFactory
+    public interface IUserFactory : IDefaultDTOFactory<UserDTO>
     {
         IUser CreateDefaultEvaluationUser();
     }
-    public class UserFactory : IUserFactory, IDefaultDTOFactory<UserDTO>
+    public class UserFactory : IUserFactory
     {
         private readonly IServiceProvider _ServiceProvider;
         public UserFactory(IServiceProvider serviceProvider)
@@ -27,7 +27,7 @@ namespace WGUD969.Factories
             IUser defaultUser = _ServiceProvider.GetService<IUser>();
             defaultUser.Initialize(new UserDTO
             {
-                userID = 1,
+                userId = 1,
                 userName = "test",
                 password = "test",
                 createdBy = "IUserFactory",
@@ -41,11 +41,11 @@ namespace WGUD969.Factories
         }
 
         // For creating a UserDTO with default values that are required by the DTO
-        public UserDTO CreateDefaultWithReqs()
+        public UserDTO GetDefaultDTOWithReqs()
         {
             return new UserDTO
             {
-                userID = 0,
+                userId = 0,
                 userName = "",
                 password = "",
                 createdBy = "IDefaultDTOFactory<UserDTO>",

@@ -9,7 +9,7 @@ namespace WGUD969.Database.DTO
 {
     public class UserDTO : ChangeAuditDTO
     {
-        public required int userID {  get; set; }
+        public required int userId {  get; set; }
         [StringLength(50)]
         public required string userName { get; set; }
         [StringLength(50)]

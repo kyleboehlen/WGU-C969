@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WGUD969.Database.Repositories
+namespace WGUD969.Models
 {
-    public class CustomerRepository
+    public interface IDefaultModelFactory<T>
     {
-
+        T GetDefaultModel();
     }
 }

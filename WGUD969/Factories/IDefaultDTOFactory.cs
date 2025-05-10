@@ -13,6 +13,6 @@ namespace WGUD969.Factories
     // you still need to have an instance of the DTO to reflect the values on to with the generic DTO Mapper
     public interface IDefaultDTOFactory<T>
     {
-        T CreateDefaultWithReqs();
+        T GetDefaultDTOWithReqs();
     }
 }

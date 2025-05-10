@@ -24,7 +24,7 @@ namespace WGUD969.Services
 
         public T MapToDTO(DbDataReader reader)
         {
-            T dto = _DefaultDTOFactory.CreateDefaultWithReqs();
+            T dto = _DefaultDTOFactory.GetDefaultDTOWithReqs();
             var properties = typeof(T).GetProperties();
 
             foreach (var property in properties)

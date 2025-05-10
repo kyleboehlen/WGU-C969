@@ -33,8 +33,19 @@
             lsvAppointments = new ListView();
             monthCalendar = new MonthCalendar();
             tbpCustomers = new TabPage();
+            txtPhoneNumber = new TextBox();
+            txtZipCode = new TextBox();
+            btnAddCity = new Button();
+            cmbCity = new ComboBox();
+            txtLine2 = new TextBox();
+            txtLine1 = new TextBox();
+            lblCustomerAddress = new Label();
+            txtCustomerName = new TextBox();
+            lblCustomerForm = new Label();
+            btnCancel = new Button();
+            btnCustomerSave = new Button();
+            btnAddCustomer = new Button();
             lsvCustomers = new ListView();
-            label1 = new Label();
             tbcMainView.SuspendLayout();
             tbpAppointments.SuspendLayout();
             tbpCustomers.SuspendLayout();
@@ -78,7 +89,18 @@
             // 
             // tbpCustomers
             // 
-            tbpCustomers.Controls.Add(label1);
+            tbpCustomers.Controls.Add(txtPhoneNumber);
+            tbpCustomers.Controls.Add(txtZipCode);
+            tbpCustomers.Controls.Add(btnAddCity);
+            tbpCustomers.Controls.Add(cmbCity);
+            tbpCustomers.Controls.Add(txtLine2);
+            tbpCustomers.Controls.Add(txtLine1);
+            tbpCustomers.Controls.Add(lblCustomerAddress);
+            tbpCustomers.Controls.Add(txtCustomerName);
+            tbpCustomers.Controls.Add(lblCustomerForm);
+            tbpCustomers.Controls.Add(btnCancel);
+            tbpCustomers.Controls.Add(btnCustomerSave);
+            tbpCustomers.Controls.Add(btnAddCustomer);
             tbpCustomers.Controls.Add(lsvCustomers);
             tbpCustomers.Location = new Point(4, 24);
             tbpCustomers.Name = "tbpCustomers";
@@ -88,6 +110,115 @@
             tbpCustomers.Text = "Customers";
             tbpCustomers.UseVisualStyleBackColor = true;
             // 
+            // txtPhoneNumber
+            // 
+            txtPhoneNumber.Location = new Point(6, 57);
+            txtPhoneNumber.Name = "txtPhoneNumber";
+            txtPhoneNumber.PlaceholderText = "Phone Number";
+            txtPhoneNumber.Size = new Size(175, 23);
+            txtPhoneNumber.TabIndex = 2;
+            // 
+            // txtZipCode
+            // 
+            txtZipCode.Enabled = false;
+            txtZipCode.Location = new Point(6, 188);
+            txtZipCode.Name = "txtZipCode";
+            txtZipCode.PlaceholderText = "Zip Code";
+            txtZipCode.Size = new Size(101, 23);
+            txtZipCode.TabIndex = 7;
+            txtZipCode.TabStop = false;
+            // 
+            // btnAddCity
+            // 
+            btnAddCity.Location = new Point(187, 158);
+            btnAddCity.Name = "btnAddCity";
+            btnAddCity.Size = new Size(75, 23);
+            btnAddCity.TabIndex = 10;
+            btnAddCity.TabStop = false;
+            btnAddCity.Text = "Add City";
+            btnAddCity.UseVisualStyleBackColor = true;
+            btnAddCity.Click += btnAddCity_Click;
+            // 
+            // cmbCity
+            // 
+            cmbCity.FormattingEnabled = true;
+            cmbCity.Items.AddRange(new object[] { "--Select City--" });
+            cmbCity.Location = new Point(3, 159);
+            cmbCity.Name = "cmbCity";
+            cmbCity.Size = new Size(171, 23);
+            cmbCity.TabIndex = 6;
+            // 
+            // txtLine2
+            // 
+            txtLine2.Location = new Point(3, 130);
+            txtLine2.Name = "txtLine2";
+            txtLine2.PlaceholderText = "Address Line 2";
+            txtLine2.Size = new Size(171, 23);
+            txtLine2.TabIndex = 4;
+            // 
+            // txtLine1
+            // 
+            txtLine1.Location = new Point(3, 101);
+            txtLine1.Name = "txtLine1";
+            txtLine1.PlaceholderText = "Address Line 1";
+            txtLine1.Size = new Size(171, 23);
+            txtLine1.TabIndex = 3;
+            // 
+            // lblCustomerAddress
+            // 
+            lblCustomerAddress.AutoSize = true;
+            lblCustomerAddress.Location = new Point(3, 83);
+            lblCustomerAddress.Name = "lblCustomerAddress";
+            lblCustomerAddress.Size = new Size(104, 15);
+            lblCustomerAddress.TabIndex = 6;
+            lblCustomerAddress.Text = "Customer Address";
+            // 
+            // txtCustomerName
+            // 
+            txtCustomerName.Location = new Point(6, 28);
+            txtCustomerName.Name = "txtCustomerName";
+            txtCustomerName.PlaceholderText = "Customer Name";
+            txtCustomerName.Size = new Size(175, 23);
+            txtCustomerName.TabIndex = 1;
+            // 
+            // lblCustomerForm
+            // 
+            lblCustomerForm.AutoSize = true;
+            lblCustomerForm.Location = new Point(6, 10);
+            lblCustomerForm.Name = "lblCustomerForm";
+            lblCustomerForm.Size = new Size(84, 15);
+            lblCustomerForm.TabIndex = 4;
+            lblCustomerForm.Text = "Add Customer";
+            // 
+            // btnCancel
+            // 
+            btnCancel.Enabled = false;
+            btnCancel.Location = new Point(187, 217);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(75, 23);
+            btnCancel.TabIndex = 10;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = true;
+            // 
+            // btnCustomerSave
+            // 
+            btnCustomerSave.Location = new Point(106, 217);
+            btnCustomerSave.Name = "btnCustomerSave";
+            btnCustomerSave.Size = new Size(75, 23);
+            btnCustomerSave.TabIndex = 9;
+            btnCustomerSave.Text = "Save";
+            btnCustomerSave.UseVisualStyleBackColor = true;
+            // 
+            // btnAddCustomer
+            // 
+            btnAddCustomer.Location = new Point(187, 6);
+            btnAddCustomer.Name = "btnAddCustomer";
+            btnAddCustomer.Size = new Size(75, 23);
+            btnAddCustomer.TabIndex = 1;
+            btnAddCustomer.TabStop = false;
+            btnAddCustomer.Text = "Add New";
+            btnAddCustomer.UseVisualStyleBackColor = true;
+            // 
             // lsvCustomers
             // 
             lsvCustomers.Location = new Point(268, 6);
@@ -95,16 +226,6 @@
             lsvCustomers.Size = new Size(448, 234);
             lsvCustomers.TabIndex = 0;
             lsvCustomers.UseCompatibleStateImageBehavior = false;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.Location = new Point(6, 110);
-            label1.Name = "label1";
-            label1.Size = new Size(249, 21);
-            label1.TabIndex = 1;
-            label1.Text = "TODO: Customer add/update form";
             // 
             // Dashboard
             // 
@@ -130,6 +251,17 @@
         private ListView lsvAppointments;
         private MonthCalendar monthCalendar;
         private ListView lsvCustomers;
-        private Label label1;
+        private Button btnCancel;
+        private Button btnCustomerSave;
+        private Button btnAddCustomer;
+        private ComboBox cmbCity;
+        private TextBox txtLine2;
+        private TextBox txtLine1;
+        private Label lblCustomerAddress;
+        private TextBox txtCustomerName;
+        private Label lblCustomerForm;
+        private Button btnAddCity;
+        private TextBox txtPhoneNumber;
+        private TextBox txtZipCode;
     }
 }
