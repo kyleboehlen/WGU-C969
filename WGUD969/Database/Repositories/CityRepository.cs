@@ -13,9 +13,8 @@ namespace WGUD969.Database.Repositories
 {
     public interface ICityRepository
     {
-        public Task<List<CityRepository>> GetAllAsync();
+        public Task<List<ICity>> GetAllWithCountriesAsync();
         public Task<ICity> CreateAsync(string city, string country);
-        // TODO: Binding list for Labels
     }
     public class CityRepository : ICityRepository
     {
@@ -59,13 +58,34 @@ namespace WGUD969.Database.Repositories
             cityDTO.cityId = await _CityDAO.CreateAsync(cityDTO);
             // If the audit data ever mattered to get from here to a very exact degree this would need to be updated to get a fresh copy of cityDTO
             city.Initialize(cityDTO);
-            // TODO: update label list
             return city;
         }
 
-        public Task<List<CityRepository>> GetAllAsync()
+        private async Task<List<ICity>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            List<CityDTO> cityDTOs = (List<CityDTO>)await _CityDAO.GetAllAsync();
+
+            List<ICity> cities = cityDTOs
+                .Select(dto =>
+                {
+                    ICity city = _CityFactory.GetDefaultModel();
+                    city.Initialize(dto);
+                    return city;
+                })
+                .ToList();
+
+            return cities;
+        }
+
+        public async Task<List<ICity>> GetAllWithCountriesAsync()
+        {
+            List<ICountry> countries = await _CountryRepository.GetAllAsync();
+            List<ICity> cities = await GetAllAsync();
+            return cities.Select(city =>
+            {
+                city.HydrateCountry(countries);
+                return city;
+            }).ToList();
         }
     }
 }

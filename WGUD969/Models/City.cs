@@ -13,7 +13,7 @@ namespace WGUD969.Models
         int Id { get; }
         string Name { get; set; }
         ICountry Country { get; set; }
-        Task HydrateCountry();
+        Task HydrateCountry(List<ICountry>? countries);
     }
     public class City : ICity
     {
@@ -31,8 +31,9 @@ namespace WGUD969.Models
             _CountryRepository = countryRepository;
         }
 
-        public void Initialize(CityDTO? dto)
+        public void Initialize(CityDTO dto)
         {
+            Id = dto.cityId;
             _CountryId = dto.countryId;
             Name = dto.city;
             CreatedOn = dto.createDate;
@@ -41,9 +42,15 @@ namespace WGUD969.Models
             UpdatedBy = dto.lastUpdateBy;
         }
 
-        public async Task HydrateCountry()
+        public async Task HydrateCountry(List<ICountry>? countries = null)
         {
-            Country = await _CountryRepository.GetCountryByIdAsync(_CountryId);
+            if (countries != null)
+            {
+                Country = countries.First(country => country.Id == _CountryId);
+            } else
+            {
+                Country = await _CountryRepository.GetCountryByIdAsync(_CountryId);
+            }
         }
 
         public CityDTO ToDTO()

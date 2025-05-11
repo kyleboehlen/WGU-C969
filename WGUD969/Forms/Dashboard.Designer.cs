@@ -236,6 +236,7 @@
             Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Name = "Dashboard";
             Text = "Dashboard";
+            Load += Form_Load;
             tbcMainView.ResumeLayout(false);
             tbpAppointments.ResumeLayout(false);
             tbpCustomers.ResumeLayout(false);

@@ -58,6 +58,7 @@ namespace WGUD969
             services.AddSingleton<ILocationService, LocationService>();
             services.AddSingleton<ITranslationService, TranslationService>();
             services.AddSingleton<ICryptographyService, CryptographyService>();
+            services.AddSingleton<ICityService, CityService>();
 
             // DATA ACCESS LAYER
             services.AddSingleton<IMySqlConnectionFactory, MySqlConnectionFactory>();

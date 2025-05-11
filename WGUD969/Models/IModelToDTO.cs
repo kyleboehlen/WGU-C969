@@ -9,7 +9,7 @@ namespace WGUD969.Models
 {
     public interface IModelToDTO<T>
     {
-        void Initialize(T? dto);
+        void Initialize(T dto);
         T ToDTO();
     }
 }
