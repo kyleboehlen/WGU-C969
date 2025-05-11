@@ -8,19 +8,35 @@ using WGUD969.Database.DAO;
 using WGUD969.Database.DTO;
 using WGUD969.Factories;
 using WGUD969.Models;
+using static WGUD969.Database.Repositories.CityRepository;
 
 namespace WGUD969.Database.Repositories
 {
+    public delegate Task AsyncEventHandler<TEventArgs>(object sender, TEventArgs e) where TEventArgs : EventArgs;
+
+    public class CityEventArgs : EventArgs
+    {
+        public int CityId { get; }
+
+        public CityEventArgs(int cityId)
+        {
+            CityId = cityId;
+        }
+    }
+
     public interface ICityRepository
     {
         public Task<List<ICity>> GetAllWithCountriesAsync();
         public Task<ICity> CreateAsync(string city, string country);
+        public event AsyncEventHandler<CityEventArgs> CityAdded;
     }
     public class CityRepository : ICityRepository
     {
         private readonly IDAO<CityDTO> _CityDAO;
         private readonly ICountryRepository _CountryRepository;
         private readonly ICityFactory _CityFactory;
+        public event AsyncEventHandler<CityEventArgs> CityAdded;
+
         public CityRepository(IDAO<CityDTO> CityDAO, ICountryRepository countryRepository, ICityFactory cityFactory)
         {
             _CityDAO = CityDAO;
@@ -58,8 +74,28 @@ namespace WGUD969.Database.Repositories
             cityDTO.cityId = await _CityDAO.CreateAsync(cityDTO);
             // If the audit data ever mattered to get from here to a very exact degree this would need to be updated to get a fresh copy of cityDTO
             city.Initialize(cityDTO);
+            // We want to fire an event that allows the dashboard to update with the new city list, we'll pass the new city ID so you can select the new city by default
+            await OnCityAddedAsync(new CityEventArgs(city.Id));
             return city;
         }
+
+        protected virtual async Task OnCityAddedAsync(CityEventArgs e)
+        {
+            var handler = CityAdded;
+            if (handler != null)
+            {
+                List<Task> tasks = new List<Task>();
+
+                foreach (var subscriber in handler.GetInvocationList())
+                {
+                    AsyncEventHandler<CityEventArgs> asyncSubscriber = (AsyncEventHandler<CityEventArgs>)subscriber;
+                    tasks.Add(asyncSubscriber.Invoke(this, e));
+                }
+
+                await Task.WhenAll(tasks);
+            }
+        }
+
 
         private async Task<List<ICity>> GetAllAsync()
         {

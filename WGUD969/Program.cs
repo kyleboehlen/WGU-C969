@@ -68,11 +68,11 @@ namespace WGUD969
                 return factory.CreateConnection();
             });
 
-            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddSingleton<IUserRepository, UserRepository>();
             services.AddTransient<IDAO<UserDTO>, UserDAO>();
-            services.AddTransient<ICityRepository, CityRepository>();
+            services.AddSingleton<ICityRepository, CityRepository>();
             services.AddTransient<IDAO<CityDTO>, CityDAO>();
-            services.AddTransient<ICountryRepository, CountryRepository>();
+            services.AddSingleton<ICountryRepository, CountryRepository>();
             services.AddTransient<IDAO<CountryDTO>, CountryDAO>();
 
             // FACTORIES
