@@ -13,7 +13,7 @@ namespace WGUD969.Database.Repositories
 {
     public interface IUserRepository
     {
-        Task SetDefaultUserAsync(IModelToDTO<UserDTO> user);
+        Task SetDefaultUserAsync(IUser user);
         Task<IUser?> GetUserByUsername(string username);
     }
     public class UserRepository : IUserRepository
@@ -26,7 +26,7 @@ namespace WGUD969.Database.Repositories
             _ServiceProvider = serviceProvider;
         }
 
-        public async Task SetDefaultUserAsync(IModelToDTO<UserDTO> user)
+        public async Task SetDefaultUserAsync(IUser user)
         {
             // Converting User model to UserDTO as that is required to use the UserDAO
             UserDTO userDTO = user.ToDTO();

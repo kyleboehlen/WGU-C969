@@ -117,16 +117,17 @@
             txtPhoneNumber.PlaceholderText = "Phone Number";
             txtPhoneNumber.Size = new Size(175, 23);
             txtPhoneNumber.TabIndex = 2;
+            txtPhoneNumber.TextChanged += OnTextBoxValueChange;
             // 
             // txtZipCode
             // 
-            txtZipCode.Enabled = false;
             txtZipCode.Location = new Point(6, 188);
             txtZipCode.Name = "txtZipCode";
             txtZipCode.PlaceholderText = "Zip Code";
             txtZipCode.Size = new Size(101, 23);
             txtZipCode.TabIndex = 7;
             txtZipCode.TabStop = false;
+            txtZipCode.TextChanged += OnTextBoxValueChange;
             // 
             // btnAddCity
             // 
@@ -163,6 +164,7 @@
             txtLine1.PlaceholderText = "Address Line 1";
             txtLine1.Size = new Size(171, 23);
             txtLine1.TabIndex = 3;
+            txtLine1.TextChanged += OnTextBoxValueChange;
             // 
             // lblCustomerAddress
             // 
@@ -180,6 +182,7 @@
             txtCustomerName.PlaceholderText = "Customer Name";
             txtCustomerName.Size = new Size(175, 23);
             txtCustomerName.TabIndex = 1;
+            txtCustomerName.TextChanged += OnTextBoxValueChange;
             // 
             // lblCustomerForm
             // 

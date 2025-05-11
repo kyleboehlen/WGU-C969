@@ -10,7 +10,7 @@ namespace WGUD969.Database.DTO
     public class CustomerDTO : ChangeAuditDTO
     {
         [MaxLength(10)]
-        public required int customerID { get; set; }
+        public required int customerId { get; set; }
         [StringLength(45)]
         public required string name { get; set; }
         [MaxLength(10)]

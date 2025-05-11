@@ -12,12 +12,16 @@ namespace WGUD969.Models
         int Id { get; }
         string Name { get; }
         public bool IsActive { get; set; }
+        public IAddress Address { get; }
+        Task HydrateAddress(List<IAddress>? addresses = null);
     }
     public class Customer : ICustomer
     {
         public int Id { get; private set; }
         public string Name { get; set; }
         private bool? _IsActive = null;
+        private int _AddressID { get; set; }
+        public IAddress Address { get; private set; }
         public DateTime? CreatedOn { get; private set; }
         public DateTime? UpdatedOn { get; private set; }
         public string CreatedBy { get; private set; }
@@ -37,6 +41,11 @@ namespace WGUD969.Models
             }
 
             set { _IsActive = value; }
+        }
+
+        public async Task HydrateAddress(List<IAddress>? addresses = null)
+        {
+            throw new NotImplementedException();
         }
 
         CustomerDTO IModelToDTO<CustomerDTO>.ToDTO()
