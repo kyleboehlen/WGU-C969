@@ -70,6 +70,7 @@
             btnCityCancel.TabIndex = 4;
             btnCityCancel.Text = "Cancel";
             btnCityCancel.UseVisualStyleBackColor = true;
+            btnCityCancel.Click += btnCityCancel_Click;
             // 
             // btnCitySave
             // 

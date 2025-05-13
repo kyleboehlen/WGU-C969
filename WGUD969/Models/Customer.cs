@@ -4,23 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WGUD969.Database.DTO;
+using WGUD969.Database.Repositories;
 
 namespace WGUD969.Models
 {
     public interface ICustomer : IModelToDTO<CustomerDTO>, IModelChangeAudit
     {
         int Id { get; }
-        string Name { get; }
+        string Name { get; set; }
         public bool IsActive { get; set; }
         public IAddress Address { get; }
-        Task HydrateAddress(List<IAddress>? addresses = null);
+        public void HydrateAddress(IAddress address);
     }
     public class Customer : ICustomer
     {
         public int Id { get; private set; }
         public string Name { get; set; }
         private bool? _IsActive = null;
-        private int _AddressID { get; set; }
+        private int? _AddressID { get; set; }
         public IAddress Address { get; private set; }
         public DateTime? CreatedOn { get; private set; }
         public DateTime? UpdatedOn { get; private set; }
@@ -29,7 +30,14 @@ namespace WGUD969.Models
 
         void IModelToDTO<CustomerDTO>.Initialize(CustomerDTO? dto)
         {
-            throw new NotImplementedException();
+            Id = dto.customerId;
+            Name = dto.customerName;
+            _AddressID = dto.addressId;
+            _IsActive = dto.active;
+            CreatedOn = dto.createDate;
+            CreatedBy = dto.createdBy;
+            UpdatedOn = dto.lastUpdate;
+            UpdatedBy = dto.lastUpdateBy;
         }
 
         public bool IsActive
@@ -43,14 +51,26 @@ namespace WGUD969.Models
             set { _IsActive = value; }
         }
 
-        public async Task HydrateAddress(List<IAddress>? addresses = null)
+        public void HydrateAddress(IAddress? address)
         {
-            throw new NotImplementedException();
+            if (address != null)
+            {
+                _AddressID = address.Id;
+                Address = address;
+            }
         }
 
         CustomerDTO IModelToDTO<CustomerDTO>.ToDTO()
         {
-            throw new NotImplementedException();
+            return new CustomerDTO
+            {
+
+                customerId = Id,
+                customerName = Name,
+                addressId = _AddressID,
+                createdBy = CreatedBy,
+                lastUpdateBy = UpdatedBy,
+            };
         }
     }
 }

@@ -64,5 +64,10 @@ namespace WGUD969.Forms
             // TODO: trigger event
             Close();
         }
+
+        private void btnCityCancel_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }

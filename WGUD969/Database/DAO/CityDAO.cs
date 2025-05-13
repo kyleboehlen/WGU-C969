@@ -108,7 +108,34 @@ namespace WGUD969.Database.DAO
 
         public async Task<CityDTO?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _ExceptionHandler.ExecuteAsync<CityDTO?>(
+                async () =>
+                {
+                    using (var connection = _ConnectionFactory.CreateConnection())
+                    {
+                        await connection.OpenAsync();
+                        string query = "SELECT * FROM city WHERE cityId = @id;";
+                        using (var command = connection.CreateCommand())
+                        {
+                            command.CommandText = query;
+                            command.Parameters.AddWithValue("id", id);
+                            using (var reader = await command.ExecuteReaderAsync())
+                            {
+                                if (await reader.ReadAsync())
+                                {
+                                    // Using the DTO mapper becaause our DTOs are mapped 1:1 with the tables
+                                    return _DTOMapper.MapToDTO(reader);
+                                }
+                                else
+                                {
+                                    return null;
+                                }
+                            }
+                        }
+                    }
+                },
+                "CityDAO.GetByIDAsync()"
+            );
         }
 
         public async Task<bool> UpdateAsync(CityDTO dto)

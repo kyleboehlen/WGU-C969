@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using WGUD969.Database.DTO;
+using WGUD969.Database.Repositories;
 
 namespace WGUD969.Models
 {
@@ -16,6 +17,8 @@ namespace WGUD969.Models
         ICity City { get; set; }
         string PostalCode { get; set; }
         string PhoneNumber { get; set; }
+        public Task HydrateCity(List<ICity>? cities = null);
+        public void HydrateCity(ICity city);
     }
     public class Address : IAddress
     {
@@ -32,6 +35,11 @@ namespace WGUD969.Models
         public DateTime? UpdatedOn { get; private set; }
         public string CreatedBy { get; private set; }
         public string UpdatedBy { get; private set; }
+        private readonly ICityRepository _CityRepository;
+        public Address(ICityRepository cityRepository)
+        {
+            _CityRepository = cityRepository;
+        }
 
         public void Initialize(AddressDTO dto)
         {
@@ -47,9 +55,38 @@ namespace WGUD969.Models
             UpdatedBy = dto.lastUpdateBy;
         }
 
+        public async Task HydrateCity(List<ICity>? cities = null)
+        {
+            if (cities != null)
+            {
+                City = cities.First(country => country.Id == _CityId);
+            }
+            else
+            {
+                City = await _CityRepository.GetCityByIdAsync(_CityId);
+            }
+        }
+
+        public void HydrateCity(ICity city)
+        {
+            _CityId = city.Id;
+            City = city;
+        }
+
         public AddressDTO ToDTO()
         {
-            throw new NotImplementedException();
+            return new AddressDTO
+            {
+
+                addressId = Id,
+                address = Line1,
+                address2 = Line2,
+                cityId = _CityId,
+                postalCode = PostalCode,
+                phone = PhoneNumber,
+                createdBy = CreatedBy,
+                lastUpdateBy = UpdatedBy,
+            };
         }
     }
 }

@@ -12,7 +12,7 @@ namespace WGUD969.Database.DTO
         [MaxLength(10)]
         public required int customerId { get; set; }
         [StringLength(45)]
-        public required string name { get; set; }
+        public required string customerName { get; set; }
         [MaxLength(10)]
         public int? addressId { get; set; }
         public bool? active { get; set; }

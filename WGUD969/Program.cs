@@ -55,6 +55,8 @@ namespace WGUD969
             services.AddSingleton<IDTOMappingService<UserDTO>, DTOMappingService<UserDTO>>();
             services.AddSingleton<IDTOMappingService<CityDTO>, DTOMappingService<CityDTO>>();
             services.AddSingleton<IDTOMappingService<CountryDTO>, DTOMappingService<CountryDTO>>();
+            services.AddSingleton<IDTOMappingService<AddressDTO>, DTOMappingService<AddressDTO>>();
+            services.AddSingleton<IDTOMappingService<CustomerDTO>, DTOMappingService<CustomerDTO>>();
             services.AddSingleton<ILocationService, LocationService>();
             services.AddSingleton<ITranslationService, TranslationService>();
             services.AddSingleton<ICryptographyService, CryptographyService>();
@@ -74,6 +76,9 @@ namespace WGUD969
             services.AddTransient<IDAO<CityDTO>, CityDAO>();
             services.AddSingleton<ICountryRepository, CountryRepository>();
             services.AddTransient<IDAO<CountryDTO>, CountryDAO>();
+            services.AddSingleton<ICustomerRepository, CustomerRepository>();
+            services.AddTransient<IDAO<CustomerDTO>, CustomerDAO>();
+            services.AddSingleton<IDAO<AddressDTO>, AddressDAO>();
 
             // FACTORIES
             services.AddSingleton<UserFactory>();
@@ -85,11 +90,19 @@ namespace WGUD969
             services.AddSingleton<CountryFactory>();
             services.AddTransient<ICountryFactory>(provider => provider.GetRequiredService<CountryFactory>());
             services.AddTransient<IDefaultDTOFactory<CountryDTO>>(provider => provider.GetRequiredService<CountryFactory>());
+            services.AddSingleton<CustomerFactory>();
+            services.AddTransient<ICustomerFactory>(provider => provider.GetRequiredService<CustomerFactory>());
+            services.AddTransient<IDefaultDTOFactory<CustomerDTO>>(provider => provider.GetRequiredService<CustomerFactory>());
+            services.AddSingleton<AddressFactory>();
+            services.AddTransient<IAddressFactory>(provider => provider.GetRequiredService<AddressFactory>());
+            services.AddTransient<IDefaultDTOFactory<AddressDTO>>(provider => provider.GetRequiredService<AddressFactory>());
 
             // Models
             services.AddTransient<IUser, User>();
             services.AddTransient<ICountry, Country>();
             services.AddTransient<ICity, City>();
+            services.AddTransient<ICustomer, Customer>();
+            services.AddTransient<IAddress, Address>();
 
             // FORMS
             services.AddTransient<Login>();

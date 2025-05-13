@@ -38,6 +38,9 @@ namespace WGUD969.Database.Repositories
                 addressDTO.addressId = await _AddressDAO.CreateAsync(addressDTO);
             }
 
+            addressDTO = await _AddressDAO.GetByIdAsync(addressDTO.addressId);
+            address.Initialize(addressDTO);
+
             CustomerDTO customerDTO = customer.ToDTO();
             customerDTO.addressId = addressDTO.addressId;
             if (await _CustomerDAO.GetByIdAsync(customerDTO.customerId) != null)
@@ -49,9 +52,7 @@ namespace WGUD969.Database.Repositories
                 customerDTO.customerId = await _CustomerDAO.CreateAsync(customerDTO);
             }
 
-            customerDTO = await _CustomerDAO.GetByIdAsync(customerDTO.customerId);
-            customer.Initialize(customerDTO);
-            await customer.HydrateAddress();
+            customer.HydrateAddress(address);
             return customer;
         }
 

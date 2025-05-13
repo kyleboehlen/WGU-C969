@@ -28,6 +28,7 @@ namespace WGUD969.Database.Repositories
     {
         public Task<List<ICity>> GetAllWithCountriesAsync();
         public Task<ICity> CreateAsync(string city, string country);
+        public Task<ICity> GetCityByIdAsync(int cityId);
         public event AsyncEventHandler<CityEventArgs> CityAdded;
     }
     public class CityRepository : ICityRepository
@@ -111,6 +112,14 @@ namespace WGUD969.Database.Repositories
                 .ToList();
 
             return cities;
+        }
+
+        public async Task<ICity> GetCityByIdAsync(int id)
+        {
+            CityDTO cityDTO = await _CityDAO.GetByIdAsync(id);
+            ICity city = _CityFactory.GetDefaultModel();
+            city.Initialize(cityDTO);
+            return city;
         }
 
         public async Task<List<ICity>> GetAllWithCountriesAsync()

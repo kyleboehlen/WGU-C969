@@ -211,6 +211,7 @@
             btnCustomerSave.TabIndex = 9;
             btnCustomerSave.Text = "Save";
             btnCustomerSave.UseVisualStyleBackColor = true;
+            btnCustomerSave.Click += btnCustomerSave_Click;
             // 
             // btnAddCustomer
             // 
@@ -221,6 +222,7 @@
             btnAddCustomer.TabStop = false;
             btnAddCustomer.Text = "Add New";
             btnAddCustomer.UseVisualStyleBackColor = true;
+            btnAddCustomer.Click += btnAddCustomer_Click;
             // 
             // lsvCustomers
             // 
