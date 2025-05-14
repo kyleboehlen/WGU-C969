@@ -25,6 +25,8 @@ namespace WGUD969.Forms
         private readonly IAddressFactory _AddressFactory;
         private readonly ICustomerRepository _CustomerRepository;
         private List<TextBox> requiredTextFields = new List<TextBox>();
+        private ICustomer _Customer;
+        private IAddress _Address;
         public Dashboard(IServiceProvider serviceProvider, ICityService cityService, ICityRepository cityRepository,
             ICustomerFactory customerFactory, IAddressFactory addressFactory, ICustomerRepository customerRepository)
         {
@@ -42,12 +44,15 @@ namespace WGUD969.Forms
             requiredTextFields.Add(txtPhoneNumber);
             requiredTextFields.Add(txtLine1);
             requiredTextFields.Add(txtZipCode);
+            _Customer = _CustomerFactory.GetDefaultModel();
+            _Address = _AddressFactory.GetDefaultModel();
         }
 
         private async void Form_Load(object sender, EventArgs e)
         {
             await SetCityList();
             validateRequiredTextBox();
+            await RefreshCustomerList();
         }
 
         private void OnTextBoxValueChange(object sender, EventArgs e)
@@ -87,14 +92,61 @@ namespace WGUD969.Forms
             {
                 cmbCity.Items.Clear();
             }
+
             cmbCity.DataSource = cityLabelDict.Select(x => new { Id = x.Key, Name = x.Value }).ToList();
+
             cmbCity.DisplayMember = "Name";
             cmbCity.ValueMember = "Id";
+
             if (cityId != null)
             {
                 cmbCity.SelectedValue = (int)cityId;
 
             }
+        }
+
+        private async Task RefreshCustomerList()
+        {
+            dgvCustomers.Rows.Clear();
+            List<ICustomer> customers = await _CustomerRepository.GetAllWithAddressesAsync();
+            foreach(ICustomer customer in customers)
+            {
+                int rowIndex = dgvCustomers.Rows.Add();
+                UpdateDGVRow(customer, rowIndex);
+            }
+        }
+
+        public void UpdateDGVRow(ICustomer customer, int? index = null)
+        {
+            index = index ?? dgvCustomers.SelectedRows[0].Index;
+
+            DataGridViewRow row = dgvCustomers.Rows[(int)index];
+
+            row.Cells["Name"].Value = customer.Name;
+            row.Cells["PhoneNumber"].Value = customer.Address.PhoneNumber;
+            row.Cells["City"].Value = customer.Address.City.Name;
+            row.Cells["PostalCode"].Value = customer.Address.PostalCode;
+
+            row.Tag = customer;
+        }
+
+        private void dgvCustomer_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvCustomers.SelectedRows.Count > 0)
+            {
+                _Customer = dgvCustomers.SelectedRows[0].Tag as Customer ?? _Customer;
+                _Address = _Customer.Address ?? _Address;
+                UpdateCustomerFormValues();
+            }
+        }
+
+        private void UpdateCustomerFormValues()
+        {
+            txtCustomerName.Text = _Customer.Name;
+            txtPhoneNumber.Text = _Address.PhoneNumber;
+            txtLine1.Text = _Address.Line1;
+            txtLine2.Text = _Address.Line2;
+            txtZipCode.Text = _Address.PostalCode;
         }
 
         private void btnAddCity_Click(object sender, EventArgs e)
@@ -104,22 +156,32 @@ namespace WGUD969.Forms
 
         private async void btnCustomerSave_Click(object sender, EventArgs e)
         {
-            ICustomer newCustomer = _CustomerFactory.GetDefaultModel();
-            newCustomer.Name = txtCustomerName.Text;
-            IAddress newAddress = _AddressFactory.GetDefaultModel();
-            newAddress.PhoneNumber = txtPhoneNumber.Text;
-            newAddress.Line1 = txtLine1.Text;
-            newAddress.Line2 = txtLine2.Text;
+            _Customer.Name = txtCustomerName.Text;
+
+            _Address = _AddressFactory.GetDefaultModel();
+
+            _Address.PhoneNumber = txtPhoneNumber.Text;
+            _Address.Line1 = txtLine1.Text;
+            _Address.Line2 = txtLine2.Text;
+
             ICity selectedCity = await _CityRepository.GetCityByIdAsync(int.Parse(cmbCity.SelectedValue.ToString()));
-            newAddress.HydrateCity(selectedCity);
-            newAddress.PostalCode = txtZipCode.Text;
-            newCustomer = await _CustomerRepository.CreateOrUpdateWithAddressAsync(newCustomer, newAddress);
-            // TODO - refresh the customer list, pass the customer id to set it as selected
+            _Address.HydrateCity(selectedCity);
+
+            _Address.PostalCode = txtZipCode.Text;
+
+            _Customer = await _CustomerRepository.CreateOrUpdateWithAddressAsync(_Customer, _Address);
+            _Address = _Customer.Address;
+
+            UpdateCustomerFormValues();
+            await RefreshCustomerList();
         }
 
         private void btnAddCustomer_Click(object sender, EventArgs e)
         {
-            // TODO: clear form and unselect customer from right list
+            _Customer = _CustomerFactory.GetDefaultModel();
+            _Address = _AddressFactory.GetDefaultModel();
+
+            UpdateCustomerFormValues();
         }
     }
 }

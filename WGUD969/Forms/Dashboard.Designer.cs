@@ -30,9 +30,13 @@
         {
             tbcMainView = new TabControl();
             tbpAppointments = new TabPage();
-            lsvAppointments = new ListView();
             monthCalendar = new MonthCalendar();
             tbpCustomers = new TabPage();
+            dgvCustomers = new DataGridView();
+            name = new DataGridViewTextBoxColumn();
+            PhoneNumber = new DataGridViewTextBoxColumn();
+            City = new DataGridViewTextBoxColumn();
+            PostalCode = new DataGridViewTextBoxColumn();
             txtPhoneNumber = new TextBox();
             txtZipCode = new TextBox();
             btnAddCity = new Button();
@@ -45,10 +49,10 @@
             btnCancel = new Button();
             btnCustomerSave = new Button();
             btnAddCustomer = new Button();
-            lsvCustomers = new ListView();
             tbcMainView.SuspendLayout();
             tbpAppointments.SuspendLayout();
             tbpCustomers.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvCustomers).BeginInit();
             SuspendLayout();
             // 
             // tbcMainView
@@ -63,7 +67,6 @@
             // 
             // tbpAppointments
             // 
-            tbpAppointments.Controls.Add(lsvAppointments);
             tbpAppointments.Controls.Add(monthCalendar);
             tbpAppointments.Location = new Point(4, 24);
             tbpAppointments.Name = "tbpAppointments";
@@ -73,14 +76,6 @@
             tbpAppointments.Text = "Appointments";
             tbpAppointments.UseVisualStyleBackColor = true;
             // 
-            // lsvAppointments
-            // 
-            lsvAppointments.Location = new Point(290, 6);
-            lsvAppointments.Name = "lsvAppointments";
-            lsvAppointments.Size = new Size(426, 234);
-            lsvAppointments.TabIndex = 1;
-            lsvAppointments.UseCompatibleStateImageBehavior = false;
-            // 
             // monthCalendar
             // 
             monthCalendar.Location = new Point(12, 39);
@@ -89,6 +84,7 @@
             // 
             // tbpCustomers
             // 
+            tbpCustomers.Controls.Add(dgvCustomers);
             tbpCustomers.Controls.Add(txtPhoneNumber);
             tbpCustomers.Controls.Add(txtZipCode);
             tbpCustomers.Controls.Add(btnAddCity);
@@ -101,7 +97,6 @@
             tbpCustomers.Controls.Add(btnCancel);
             tbpCustomers.Controls.Add(btnCustomerSave);
             tbpCustomers.Controls.Add(btnAddCustomer);
-            tbpCustomers.Controls.Add(lsvCustomers);
             tbpCustomers.Location = new Point(4, 24);
             tbpCustomers.Name = "tbpCustomers";
             tbpCustomers.Padding = new Padding(3);
@@ -109,6 +104,45 @@
             tbpCustomers.TabIndex = 1;
             tbpCustomers.Text = "Customers";
             tbpCustomers.UseVisualStyleBackColor = true;
+            // 
+            // dgvCustomers
+            // 
+            dgvCustomers.AllowUserToAddRows = false;
+            dgvCustomers.AllowUserToDeleteRows = false;
+            dgvCustomers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvCustomers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvCustomers.Columns.AddRange(new DataGridViewColumn[] { name, PhoneNumber, City, PostalCode });
+            dgvCustomers.Location = new Point(268, 6);
+            dgvCustomers.Name = "dgvCustomers";
+            dgvCustomers.ReadOnly = true;
+            dgvCustomers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvCustomers.Size = new Size(448, 234);
+            dgvCustomers.TabIndex = 11;
+            dgvCustomers.SelectionChanged += dgvCustomer_SelectionChanged;
+            // 
+            // name
+            // 
+            name.HeaderText = "Name";
+            name.Name = "name";
+            name.ReadOnly = true;
+            // 
+            // PhoneNumber
+            // 
+            PhoneNumber.HeaderText = "Phone";
+            PhoneNumber.Name = "PhoneNumber";
+            PhoneNumber.ReadOnly = true;
+            // 
+            // City
+            // 
+            City.HeaderText = "City";
+            City.Name = "City";
+            City.ReadOnly = true;
+            // 
+            // PostalCode
+            // 
+            PostalCode.HeaderText = "Zip Code";
+            PostalCode.Name = "PostalCode";
+            PostalCode.ReadOnly = true;
             // 
             // txtPhoneNumber
             // 
@@ -224,14 +258,6 @@
             btnAddCustomer.UseVisualStyleBackColor = true;
             btnAddCustomer.Click += btnAddCustomer_Click;
             // 
-            // lsvCustomers
-            // 
-            lsvCustomers.Location = new Point(268, 6);
-            lsvCustomers.Name = "lsvCustomers";
-            lsvCustomers.Size = new Size(448, 234);
-            lsvCustomers.TabIndex = 0;
-            lsvCustomers.UseCompatibleStateImageBehavior = false;
-            // 
             // Dashboard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -246,6 +272,7 @@
             tbpAppointments.ResumeLayout(false);
             tbpCustomers.ResumeLayout(false);
             tbpCustomers.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvCustomers).EndInit();
             ResumeLayout(false);
         }
 
@@ -254,9 +281,7 @@
         private TabControl tbcMainView;
         private TabPage tbpAppointments;
         private TabPage tbpCustomers;
-        private ListView lsvAppointments;
         private MonthCalendar monthCalendar;
-        private ListView lsvCustomers;
         private Button btnCancel;
         private Button btnCustomerSave;
         private Button btnAddCustomer;
@@ -269,5 +294,10 @@
         private Button btnAddCity;
         private TextBox txtPhoneNumber;
         private TextBox txtZipCode;
+        private DataGridView dgvCustomers;
+        private DataGridViewTextBoxColumn name;
+        private DataGridViewTextBoxColumn PhoneNumber;
+        private DataGridViewTextBoxColumn City;
+        private DataGridViewTextBoxColumn PostalCode;
     }
 }

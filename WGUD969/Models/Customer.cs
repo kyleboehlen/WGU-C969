@@ -14,14 +14,15 @@ namespace WGUD969.Models
         string Name { get; set; }
         public bool IsActive { get; set; }
         public IAddress Address { get; }
-        public void HydrateAddress(IAddress address);
+        public void HydrateAddress(List<IAddress>? addresses);
+        public void HydrateAddress(IAddress? address);
     }
     public class Customer : ICustomer
     {
         public int Id { get; private set; }
         public string Name { get; set; }
         private bool? _IsActive = null;
-        private int? _AddressID { get; set; }
+        private int? _AddressId { get; set; }
         public IAddress Address { get; private set; }
         public DateTime? CreatedOn { get; private set; }
         public DateTime? UpdatedOn { get; private set; }
@@ -32,7 +33,7 @@ namespace WGUD969.Models
         {
             Id = dto.customerId;
             Name = dto.customerName;
-            _AddressID = dto.addressId;
+            _AddressId = dto.addressId;
             _IsActive = dto.active;
             CreatedOn = dto.createDate;
             CreatedBy = dto.createdBy;
@@ -50,12 +51,18 @@ namespace WGUD969.Models
 
             set { _IsActive = value; }
         }
-
+        public void HydrateAddress(List<IAddress>? addresses)
+        {
+            if(addresses != null)
+            {
+                Address = addresses.First(address => address.Id == _AddressId);
+            }
+        }
         public void HydrateAddress(IAddress? address)
         {
             if (address != null)
             {
-                _AddressID = address.Id;
+                _AddressId = address.Id;
                 Address = address;
             }
         }
@@ -67,7 +74,7 @@ namespace WGUD969.Models
 
                 customerId = Id,
                 customerName = Name,
-                addressId = _AddressID,
+                addressId = _AddressId,
                 createdBy = CreatedBy,
                 lastUpdateBy = UpdatedBy,
             };

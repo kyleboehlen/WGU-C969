@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
+using Mysqlx.Crud;
 using WGUD969.Database.DTO;
 using WGUD969.Factories;
+using WGUD969.Models;
 using WGUD969.Services;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace WGUD969.Database.DAO
 {
@@ -72,9 +75,38 @@ namespace WGUD969.Database.DAO
             throw new NotImplementedException();
         }
 
-        Task<IEnumerable<CustomerDTO>> IDAO<CustomerDTO>.GetAllAsync()
+        public async Task<IEnumerable<CustomerDTO>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _ExceptionHandler.ExecuteAsync<IEnumerable<CustomerDTO>>(
+                async () =>
+                {
+                    var customers = new List<CustomerDTO>();
+
+                    using (var connection = _ConnectionFactory.CreateConnection())
+                    {
+                        await connection.OpenAsync();
+
+                        string query = @"SELECT * FROM customer;";
+
+                        using (var command = connection.CreateCommand())
+                        {
+                            command.CommandText = query;
+
+                            using (var reader = await command.ExecuteReaderAsync())
+                            {
+                                while (await reader.ReadAsync())
+                                {
+                                    var customerDTO = _DTOMapper.MapToDTO(reader);
+                                    customers.Add(customerDTO);
+                                }
+                            }
+                        }
+                    }
+
+                    return customers;
+                },
+                "CustomerDAO.GetAllAsync()"
+            );
         }
 
         public async Task<CustomerDTO?> GetByIdAsync(int id)
@@ -109,9 +141,43 @@ namespace WGUD969.Database.DAO
             );
         }
 
-        Task<bool> IDAO<CustomerDTO>.UpdateAsync(CustomerDTO dto)
+        public async Task<bool> UpdateAsync(CustomerDTO dto)
         {
-            throw new NotImplementedException();
+            return await _ExceptionHandler.ExecuteAsync<bool>(
+                async () =>
+                {
+                    using (var connection = _ConnectionFactory.CreateConnection())
+                    {
+                        await connection.OpenAsync();
+                        string query = @"
+                                UPDATE customer
+                                SET 
+                                    customerName = COALESCE(@customerName, customerName),
+                                    addressId = @addressId,
+                                    active = COALESCE(@active, active), 
+                                    lastUpdate = CURRENT_TIMESTAMP,
+                                    lastUpdateBy = @lastUpdateBy
+                                WHERE customerId = @customerId";
+                        using (var command = connection.CreateCommand())
+                        {
+                            command.CommandText = query;
+
+                            // Mapping DTO values to query params, null values are handled in the query
+                            command.Parameters.AddRange(
+                                dto.GetType().GetProperties()
+                                    .Select(prop => new MySqlParameter($"@{prop.Name}", prop.GetValue(dto)))
+                                    .ToArray()
+                            );
+
+                            // Determine success based on rows affected
+                            int rowsAffected = await command.ExecuteNonQueryAsync();
+
+                            return rowsAffected > 0;
+                        }
+                    }
+                },
+                "CustomerDAO.UpdateAsync()"
+            );
         }
     }
 }

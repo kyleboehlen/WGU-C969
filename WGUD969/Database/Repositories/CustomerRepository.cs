@@ -19,11 +19,18 @@ namespace WGUD969.Database.Repositories
     {
         private readonly IDAO<CustomerDTO> _CustomerDAO;
         private readonly IDAO<AddressDTO> _AddressDAO;
+        private readonly IAddressFactory _AddressFactory;
+        private readonly ICustomerFactory _CustomerFactory;
+        private readonly ICityRepository _CityRepository;
 
-        public CustomerRepository(IDAO<CustomerDTO> customerDAO,  IDAO<AddressDTO> addressDAO)
+        public CustomerRepository(IDAO<CustomerDTO> customerDAO,  IDAO<AddressDTO> addressDAO, IAddressFactory addressFactory,
+            ICustomerFactory customerFactory, ICityRepository cityRepository)
         {
             _CustomerDAO = customerDAO;
             _AddressDAO = addressDAO;
+            _AddressFactory = addressFactory;
+            _CustomerFactory = customerFactory;
+            _CityRepository = cityRepository;
         }
 
         public async Task<ICustomer> CreateOrUpdateWithAddressAsync(ICustomer customer, IAddress address)
@@ -56,9 +63,27 @@ namespace WGUD969.Database.Repositories
             return customer;
         }
 
-        public Task<List<ICustomer>> GetAllWithAddressesAsync()
+        public async Task<List<ICustomer>> GetAllWithAddressesAsync()
         {
-            throw new NotImplementedException();
+            List<ICity> cities = await _CityRepository.GetAllWithCountriesAsync();
+            List<AddressDTO> addressDTOs = (List<AddressDTO>)await _AddressDAO.GetAllAsync();
+            List<IAddress> addresses = addressDTOs.Select(dto =>
+            {
+                IAddress address = _AddressFactory.GetDefaultModel();
+                address.Initialize(dto);
+                address.HydrateCity(cities);
+                return address;
+            }).ToList();
+
+            List<CustomerDTO> customerDTOs = (List<CustomerDTO>)await _CustomerDAO.GetAllAsync();
+            List<ICustomer> customers = customerDTOs.Select(dto =>
+            {
+                ICustomer customer = _CustomerFactory.GetDefaultModel();
+                customer.Initialize(dto);
+                customer.HydrateAddress(addresses);
+                return customer;
+            }).ToList();
+            return customers;
         }
     }
 }

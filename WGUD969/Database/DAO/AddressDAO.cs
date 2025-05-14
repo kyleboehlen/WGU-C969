@@ -74,9 +74,38 @@ namespace WGUD969.Database.DAO
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<AddressDTO>> GetAllAsync()
+        public async Task<IEnumerable<AddressDTO>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _ExceptionHandler.ExecuteAsync<IEnumerable<AddressDTO>>(
+                async () =>
+                {
+                    var addresses = new List<AddressDTO>();
+
+                    using (var connection = _ConnectionFactory.CreateConnection())
+                    {
+                        await connection.OpenAsync();
+
+                        string query = @"SELECT * FROM address;";
+
+                        using (var command = connection.CreateCommand())
+                        {
+                            command.CommandText = query;
+
+                            using (var reader = await command.ExecuteReaderAsync())
+                            {
+                                while (await reader.ReadAsync())
+                                {
+                                    var addressDTO = _DTOMapper.MapToDTO(reader);
+                                    addresses.Add(addressDTO);
+                                }
+                            }
+                        }
+                    }
+
+                    return addresses;
+                },
+                "AddressDAO.GetAllAsync()"
+            );
         }
 
         public async Task<AddressDTO?> GetByIdAsync(int id)
@@ -111,9 +140,45 @@ namespace WGUD969.Database.DAO
             );
         }
 
-        public Task<bool> UpdateAsync(AddressDTO dto)
+        public async Task<bool> UpdateAsync(AddressDTO dto)
         {
-            throw new NotImplementedException();
+            return await _ExceptionHandler.ExecuteAsync<bool>(
+                async () =>
+                {
+                    using (var connection = _ConnectionFactory.CreateConnection())
+                    {
+                        await connection.OpenAsync();
+                        string query = @"
+                                UPDATE address
+                                SET 
+                                    address = COALESCE(@address, address),
+                                    address2 = COALESCE(@address2, address2),
+                                    cityId = @cityId,
+                                    postalCode = COALESCE(@postalCode, postalCode),
+                                    phone = COALESCE(@phone, phone),
+                                    lastUpdate = NOW(),
+                                    lastUpdateBy = @lastUpdateBy
+                                WHERE addressId = @addressId";
+                        using (var command = connection.CreateCommand())
+                        {
+                            command.CommandText = query;
+
+                            // Mapping DTO values to query params, null values are handled in the query
+                            command.Parameters.AddRange(
+                                dto.GetType().GetProperties()
+                                    .Select(prop => new MySqlParameter($"@{prop.Name}", prop.GetValue(dto)))
+                                    .ToArray()
+                            );
+
+                            // Determine success based on rows affected
+                            int rowsAffected = await command.ExecuteNonQueryAsync();
+
+                            return rowsAffected > 0;
+                        }
+                    }
+                },
+                "AddressDAO.UpdateAsync()"
+            );
         }
     }
 }

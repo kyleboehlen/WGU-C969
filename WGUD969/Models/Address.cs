@@ -43,7 +43,7 @@ namespace WGUD969.Models
 
         public void Initialize(AddressDTO dto)
         {
-            Id = dto.cityId;
+            Id = dto.addressId;
             Line1 = dto.address;
             Line2 = dto.address2;
             _CityId = dto.cityId;
