@@ -152,6 +152,7 @@
             txtPhoneNumber.Size = new Size(175, 23);
             txtPhoneNumber.TabIndex = 2;
             txtPhoneNumber.TextChanged += OnTextBoxValueChange;
+            txtPhoneNumber.KeyPress += txtPhoneNumber_KeyPress;
             // 
             // txtZipCode
             // 
@@ -159,9 +160,10 @@
             txtZipCode.Name = "txtZipCode";
             txtZipCode.PlaceholderText = "Zip Code";
             txtZipCode.Size = new Size(101, 23);
-            txtZipCode.TabIndex = 7;
+            txtZipCode.TabIndex = 6;
             txtZipCode.TabStop = false;
             txtZipCode.TextChanged += OnTextBoxValueChange;
+            txtZipCode.KeyPress += txtZipCde_KeyPress;
             // 
             // btnAddCity
             // 
@@ -181,7 +183,7 @@
             cmbCity.Location = new Point(3, 159);
             cmbCity.Name = "cmbCity";
             cmbCity.Size = new Size(171, 23);
-            cmbCity.TabIndex = 6;
+            cmbCity.TabIndex = 5;
             // 
             // txtLine2
             // 
@@ -243,7 +245,7 @@
             btnCustomerSave.Location = new Point(106, 217);
             btnCustomerSave.Name = "btnCustomerSave";
             btnCustomerSave.Size = new Size(75, 23);
-            btnCustomerSave.TabIndex = 9;
+            btnCustomerSave.TabIndex = 7;
             btnCustomerSave.Text = "Save";
             btnCustomerSave.UseVisualStyleBackColor = true;
             btnCustomerSave.Click += btnCustomerSave_Click;

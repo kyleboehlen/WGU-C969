@@ -166,6 +166,8 @@ namespace WGUD969.Forms
 
         private async void btnCustomerSave_Click(object sender, EventArgs e)
         {
+            bool changeIndexAfterSave = _Customer.Id == 0;
+
             _Customer.Name = txtCustomerName.Text.Trim();
 
             _Address = _AddressFactory.GetDefaultModel();
@@ -184,6 +186,15 @@ namespace WGUD969.Forms
 
             UpdateCustomerFormValues();
             await RefreshCustomerList();
+
+            if (changeIndexAfterSave)
+            {
+                if (dgvCustomers.Rows.Count > 0)
+                {
+                    dgvCustomers.ClearSelection();
+                    dgvCustomers.Rows[dgvCustomers.Rows.Count - 1].Selected = true;
+                }
+            }
         }
 
         private void btnAddCustomer_Click(object sender, EventArgs e)
@@ -194,6 +205,7 @@ namespace WGUD969.Forms
             UpdateCustomerFormValues();
 
             btnDelete.Enabled = false;
+            dgvCustomers.ClearSelection();
         }
 
         private async void btnDelete_Click(object sender, EventArgs e)
@@ -208,6 +220,24 @@ namespace WGUD969.Forms
                 {
                     btnAddCustomer_Click(sender, e);
                 }
+            }
+        }
+
+        private void txtPhoneNumber_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // allows numbers, dashes, and control characters
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != '-' && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtZipCde_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // allows numbers and control characters - maxes length at 10
+            if ((!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar)) || txtZipCode.Text.Length >= 10)
+            {
+                e.Handled = true;
             }
         }
     }
