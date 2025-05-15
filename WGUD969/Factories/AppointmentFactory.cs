@@ -10,7 +10,16 @@ namespace WGUD969.Factories
 {
     public interface IAppointmentFactory : IDefaultDTOFactory<AppointmentDTO>, IDefaultModelFactory<IAppointment>
     { }
-    public class AppointmentFactory
+    public class AppointmentFactory : IAppointmentFactory
     {
+        public AppointmentDTO GetDefaultDTOWithReqs()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IAppointment GetDefaultModel()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

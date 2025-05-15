@@ -1,6 +1,6 @@
 ﻿namespace WGUD969.Forms
 {
-    partial class Appointment
+    partial class AppointmentForm
     {
         /// <summary>
         /// Required designer variable.

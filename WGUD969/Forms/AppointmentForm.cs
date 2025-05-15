@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace WGUD969.Forms
 {
-    public partial class Appointment : Form
+    public partial class AppointmentForm : Form
     {
-        public Appointment()
+        public AppointmentForm()
         {
             InitializeComponent();
         }

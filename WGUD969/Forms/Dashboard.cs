@@ -36,14 +36,18 @@ namespace WGUD969.Forms
             _CustomerFactory = customerFactory;
             _AddressFactory = addressFactory;
             _CustomerRepository = customerRepository;
+
             InitializeComponent();
+
             // Subcribing to new cities
             _CityRepository.CityAdded += CityRepository_CityAdded;
+
             // Setting all of our required text fields for easy iterative validation
             requiredTextFields.Add(txtCustomerName);
             requiredTextFields.Add(txtPhoneNumber);
             requiredTextFields.Add(txtLine1);
             requiredTextFields.Add(txtZipCode);
+
             _Customer = _CustomerFactory.GetDefaultModel();
             _Address = _AddressFactory.GetDefaultModel();
         }
@@ -51,7 +55,9 @@ namespace WGUD969.Forms
         private async void Form_Load(object sender, EventArgs e)
         {
             await SetCityList();
+
             validateRequiredTextBox();
+
             await RefreshCustomerList();
         }
 
@@ -108,6 +114,7 @@ namespace WGUD969.Forms
         private async Task RefreshCustomerList()
         {
             dgvCustomers.Rows.Clear();
+
             List<ICustomer> customers = await _CustomerRepository.GetAllWithAddressesAsync();
             foreach(ICustomer customer in customers)
             {
@@ -136,6 +143,7 @@ namespace WGUD969.Forms
             {
                 _Customer = dgvCustomers.SelectedRows[0].Tag as Customer ?? _Customer;
                 _Address = _Customer.Address ?? _Address;
+
                 UpdateCustomerFormValues();
             }
         }
@@ -156,18 +164,18 @@ namespace WGUD969.Forms
 
         private async void btnCustomerSave_Click(object sender, EventArgs e)
         {
-            _Customer.Name = txtCustomerName.Text;
+            _Customer.Name = txtCustomerName.Text.Trim();
 
             _Address = _AddressFactory.GetDefaultModel();
 
-            _Address.PhoneNumber = txtPhoneNumber.Text;
-            _Address.Line1 = txtLine1.Text;
-            _Address.Line2 = txtLine2.Text;
+            _Address.PhoneNumber = txtPhoneNumber.Text.Trim();
+            _Address.Line1 = txtLine1.Text.Trim();
+            _Address.Line2 = txtLine2.Text.Trim();
 
             ICity selectedCity = await _CityRepository.GetCityByIdAsync(int.Parse(cmbCity.SelectedValue.ToString()));
             _Address.HydrateCity(selectedCity);
 
-            _Address.PostalCode = txtZipCode.Text;
+            _Address.PostalCode = txtZipCode.Text.Trim();
 
             _Customer = await _CustomerRepository.CreateOrUpdateWithAddressAsync(_Customer, _Address);
             _Address = _Customer.Address;
