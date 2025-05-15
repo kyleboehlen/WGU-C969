@@ -116,7 +116,7 @@ namespace WGUD969.Forms
             dgvCustomers.Rows.Clear();
 
             List<ICustomer> customers = await _CustomerRepository.GetAllWithAddressesAsync();
-            foreach(ICustomer customer in customers)
+            foreach (ICustomer customer in customers)
             {
                 int rowIndex = dgvCustomers.Rows.Add();
                 UpdateDGVRow(customer, rowIndex);
@@ -145,6 +145,8 @@ namespace WGUD969.Forms
                 _Address = _Customer.Address ?? _Address;
 
                 UpdateCustomerFormValues();
+
+                btnDelete.Enabled = true;
             }
         }
 
@@ -190,6 +192,23 @@ namespace WGUD969.Forms
             _Address = _AddressFactory.GetDefaultModel();
 
             UpdateCustomerFormValues();
+
+            btnDelete.Enabled = false;
+        }
+
+        private async void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (await _CustomerRepository.DeleteAsync(_Customer)) {
+                await RefreshCustomerList();
+                if (dgvCustomers.Rows.Count > 0)
+                {
+                    dgvCustomers.Rows[0].Selected = true;
+                    dgvCustomer_SelectionChanged(sender, e);
+                } else
+                {
+                    btnAddCustomer_Click(sender, e);
+                }
+            }
         }
     }
 }

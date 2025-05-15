@@ -14,6 +14,7 @@ namespace WGUD969.Database.Repositories
     {
         public Task<List<ICustomer>> GetAllWithAddressesAsync();
         public Task<ICustomer> CreateOrUpdateWithAddressAsync(ICustomer customer, IAddress address);
+        public Task<bool> DeleteAsync(ICustomer customer);
     }
     public class CustomerRepository : ICustomerRepository
     {
@@ -84,6 +85,11 @@ namespace WGUD969.Database.Repositories
                 return customer;
             }).ToList();
             return customers;
+        }
+    
+        public async Task<bool> DeleteAsync(ICustomer customer)
+        {
+            return await _CustomerDAO.DeleteByIdAsync(customer.Id);
         }
     }
 }

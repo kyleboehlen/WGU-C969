@@ -46,7 +46,7 @@
             lblCustomerAddress = new Label();
             txtCustomerName = new TextBox();
             lblCustomerForm = new Label();
-            btnCancel = new Button();
+            btnDelete = new Button();
             btnCustomerSave = new Button();
             btnAddCustomer = new Button();
             tbcMainView.SuspendLayout();
@@ -94,7 +94,7 @@
             tbpCustomers.Controls.Add(lblCustomerAddress);
             tbpCustomers.Controls.Add(txtCustomerName);
             tbpCustomers.Controls.Add(lblCustomerForm);
-            tbpCustomers.Controls.Add(btnCancel);
+            tbpCustomers.Controls.Add(btnDelete);
             tbpCustomers.Controls.Add(btnCustomerSave);
             tbpCustomers.Controls.Add(btnAddCustomer);
             tbpCustomers.Location = new Point(4, 24);
@@ -227,15 +227,16 @@
             lblCustomerForm.TabIndex = 4;
             lblCustomerForm.Text = "Add Customer";
             // 
-            // btnCancel
+            // btnDelete
             // 
-            btnCancel.Enabled = false;
-            btnCancel.Location = new Point(187, 217);
-            btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(75, 23);
-            btnCancel.TabIndex = 10;
-            btnCancel.Text = "Cancel";
-            btnCancel.UseVisualStyleBackColor = true;
+            btnDelete.Enabled = false;
+            btnDelete.Location = new Point(187, 217);
+            btnDelete.Name = "btnDelete";
+            btnDelete.Size = new Size(75, 23);
+            btnDelete.TabIndex = 10;
+            btnDelete.Text = "Delete";
+            btnDelete.UseVisualStyleBackColor = true;
+            btnDelete.Click += btnDelete_Click;
             // 
             // btnCustomerSave
             // 
@@ -282,7 +283,7 @@
         private TabPage tbpAppointments;
         private TabPage tbpCustomers;
         private MonthCalendar monthCalendar;
-        private Button btnCancel;
+        private Button btnDelete;
         private Button btnCustomerSave;
         private Button btnAddCustomer;
         private ComboBox cmbCity;

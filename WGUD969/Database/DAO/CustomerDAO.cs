@@ -70,9 +70,29 @@ namespace WGUD969.Database.DAO
                 "CityDAO.CreateAsync()");
         }
 
-        Task<bool> IDAO<CustomerDTO>.DeleteByIdAsync(int id)
+        public async Task<bool> DeleteByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _ExceptionHandler.ExecuteAsync<bool>(
+                async () =>
+                {
+                    using (var connection = _ConnectionFactory.CreateConnection())
+                    {
+                        await connection.OpenAsync();
+                        string query = "DELETE FROM customer WHERE customerId = @id;";
+                        using (var command = connection.CreateCommand())
+                        {
+                            command.CommandText = query;
+                            command.Parameters.AddWithValue("id", id);
+
+                            // Determine success based on rows affected
+                            int rowsAffected = await command.ExecuteNonQueryAsync();
+
+                            return rowsAffected > 0;
+                        }
+                    }
+                },
+                "CustomerDAO.DeleteByIdAsync()"
+            );
         }
 
         public async Task<IEnumerable<CustomerDTO>> GetAllAsync()
