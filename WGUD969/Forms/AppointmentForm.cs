@@ -16,5 +16,10 @@ namespace WGUD969.Forms
         {
             InitializeComponent();
         }
+
+        public async void Form_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

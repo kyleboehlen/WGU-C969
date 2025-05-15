@@ -24,11 +24,13 @@ namespace WGUD969.Forms
         private readonly ICustomerFactory _CustomerFactory;
         private readonly IAddressFactory _AddressFactory;
         private readonly ICustomerRepository _CustomerRepository;
+        private readonly ITimezoneService _TimezoneService;
         private List<TextBox> requiredTextFields = new List<TextBox>();
         private ICustomer _Customer;
         private IAddress _Address;
         public Dashboard(IServiceProvider serviceProvider, ICityService cityService, ICityRepository cityRepository,
-            ICustomerFactory customerFactory, IAddressFactory addressFactory, ICustomerRepository customerRepository)
+            ICustomerFactory customerFactory, IAddressFactory addressFactory, ICustomerRepository customerRepository,
+            ITimezoneService timezoneService)
         {
             _ServiceProvider = serviceProvider;
             _CityService = cityService;
@@ -36,6 +38,7 @@ namespace WGUD969.Forms
             _CustomerFactory = customerFactory;
             _AddressFactory = addressFactory;
             _CustomerRepository = customerRepository;
+            _TimezoneService = timezoneService;
 
             InitializeComponent();
 
@@ -50,6 +53,8 @@ namespace WGUD969.Forms
 
             _Customer = _CustomerFactory.GetDefaultModel();
             _Address = _AddressFactory.GetDefaultModel();
+
+            lblLocalTimezone.Text = _TimezoneService.LocalLabel;
         }
 
         private async void Form_Load(object sender, EventArgs e)
@@ -210,13 +215,15 @@ namespace WGUD969.Forms
 
         private async void btnDelete_Click(object sender, EventArgs e)
         {
-            if (await _CustomerRepository.DeleteAsync(_Customer)) {
+            if (await _CustomerRepository.DeleteAsync(_Customer))
+            {
                 await RefreshCustomerList();
                 if (dgvCustomers.Rows.Count > 0)
                 {
                     dgvCustomers.Rows[0].Selected = true;
                     dgvCustomer_SelectionChanged(sender, e);
-                } else
+                }
+                else
                 {
                     btnAddCustomer_Click(sender, e);
                 }
@@ -239,6 +246,11 @@ namespace WGUD969.Forms
             {
                 e.Handled = true;
             }
+        }
+
+        private void btnAddNewAppointment_Click(object sender, EventArgs e)
+        {
+            _ServiceProvider.GetRequiredService<AppointmentForm>().Show();
         }
     }
 }

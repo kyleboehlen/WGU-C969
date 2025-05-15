@@ -61,6 +61,7 @@ namespace WGUD969
             services.AddSingleton<ITranslationService, TranslationService>();
             services.AddSingleton<ICryptographyService, CryptographyService>();
             services.AddSingleton<ICityService, CityService>();
+            services.AddSingleton<ITimezoneService, TimezoneService>();
 
             // DATA ACCESS LAYER
             services.AddSingleton<IMySqlConnectionFactory, MySqlConnectionFactory>();
@@ -108,7 +109,7 @@ namespace WGUD969
             services.AddTransient<Login>();
             services.AddTransient<Dashboard>();
             services.AddTransient<CityForm>();
-            services.AddTransient<Appointment>();
+            services.AddTransient<AppointmentForm>();
         }
     }
 }

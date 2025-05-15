@@ -34,16 +34,17 @@
             label2 = new Label();
             label3 = new Label();
             label4 = new Label();
-            dateTimePicker1 = new DateTimePicker();
-            dateTimePicker2 = new DateTimePicker();
-            dateTimePicker3 = new DateTimePicker();
-            comboBox1 = new ComboBox();
-            label5 = new Label();
-            label6 = new Label();
-            comboBox2 = new ComboBox();
-            textBox3 = new TextBox();
-            richTextBox1 = new RichTextBox();
+            dtpDate = new DateTimePicker();
+            dtlpStartTime = new DateTimePicker();
+            dtpEndTime = new DateTimePicker();
+            cmbAppointmentType = new ComboBox();
+            cmbLocationCity = new ComboBox();
+            txtVirtualMeetingURL = new TextBox();
+            rtbAppointmentDetails = new RichTextBox();
             label7 = new Label();
+            label8 = new Label();
+            rabInPerson = new RadioButton();
+            rabVirtually = new RadioButton();
             SuspendLayout();
             // 
             // cmbCustomer
@@ -100,113 +101,128 @@
             label4.TabIndex = 16;
             label4.Text = "Appointment is";
             // 
-            // dateTimePicker1
+            // dtpDate
             // 
-            dateTimePicker1.Location = new Point(124, 58);
-            dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(216, 23);
-            dateTimePicker1.TabIndex = 17;
+            dtpDate.Location = new Point(124, 58);
+            dtpDate.Name = "dtpDate";
+            dtpDate.Size = new Size(216, 23);
+            dtpDate.TabIndex = 17;
             // 
-            // dateTimePicker2
+            // dtlpStartTime
             // 
-            dateTimePicker2.Format = DateTimePickerFormat.Time;
-            dateTimePicker2.Location = new Point(51, 88);
-            dateTimePicker2.Name = "dateTimePicker2";
-            dateTimePicker2.Size = new Size(114, 23);
-            dateTimePicker2.TabIndex = 18;
+            dtlpStartTime.Format = DateTimePickerFormat.Time;
+            dtlpStartTime.Location = new Point(51, 88);
+            dtlpStartTime.Name = "dtlpStartTime";
+            dtlpStartTime.Size = new Size(114, 23);
+            dtlpStartTime.TabIndex = 18;
             // 
-            // dateTimePicker3
+            // dtpEndTime
             // 
-            dateTimePicker3.Format = DateTimePickerFormat.Time;
-            dateTimePicker3.Location = new Point(226, 88);
-            dateTimePicker3.Name = "dateTimePicker3";
-            dateTimePicker3.Size = new Size(114, 23);
-            dateTimePicker3.TabIndex = 19;
+            dtpEndTime.Format = DateTimePickerFormat.Time;
+            dtpEndTime.Location = new Point(226, 88);
+            dtpEndTime.Name = "dtpEndTime";
+            dtpEndTime.Size = new Size(114, 23);
+            dtpEndTime.TabIndex = 19;
             // 
-            // comboBox1
+            // cmbAppointmentType
             // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Items.AddRange(new object[] { "In-Person", "Virtual" });
-            comboBox1.Location = new Point(107, 149);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(233, 23);
-            comboBox1.TabIndex = 20;
+            cmbAppointmentType.FormattingEnabled = true;
+            cmbAppointmentType.Items.AddRange(new object[] { "Presentation", "Scrum" });
+            cmbAppointmentType.Location = new Point(108, 149);
+            cmbAppointmentType.Name = "cmbAppointmentType";
+            cmbAppointmentType.Size = new Size(232, 23);
+            cmbAppointmentType.TabIndex = 20;
             // 
-            // label5
+            // cmbLocationCity
             // 
-            label5.AutoSize = true;
-            label5.Location = new Point(12, 197);
-            label5.Name = "label5";
-            label5.Size = new Size(62, 15);
-            label5.TabIndex = 21;
-            label5.Text = "Located in";
+            cmbLocationCity.FormattingEnabled = true;
+            cmbLocationCity.Location = new Point(160, 176);
+            cmbLocationCity.Name = "cmbLocationCity";
+            cmbLocationCity.Size = new Size(180, 23);
+            cmbLocationCity.TabIndex = 23;
             // 
-            // label6
+            // txtVirtualMeetingURL
             // 
-            label6.AutoSize = true;
-            label6.Location = new Point(12, 226);
-            label6.Name = "label6";
-            label6.Size = new Size(69, 15);
-            label6.TabIndex = 22;
-            label6.Text = "Accessed at";
+            txtVirtualMeetingURL.Enabled = false;
+            txtVirtualMeetingURL.Location = new Point(153, 204);
+            txtVirtualMeetingURL.Name = "txtVirtualMeetingURL";
+            txtVirtualMeetingURL.PlaceholderText = "Virtual Meeting URL";
+            txtVirtualMeetingURL.Size = new Size(187, 23);
+            txtVirtualMeetingURL.TabIndex = 24;
             // 
-            // comboBox2
+            // rtbAppointmentDetails
             // 
-            comboBox2.FormattingEnabled = true;
-            comboBox2.Location = new Point(80, 194);
-            comboBox2.Name = "comboBox2";
-            comboBox2.Size = new Size(260, 23);
-            comboBox2.TabIndex = 23;
-            // 
-            // textBox3
-            // 
-            textBox3.Enabled = false;
-            textBox3.Location = new Point(87, 223);
-            textBox3.Name = "textBox3";
-            textBox3.PlaceholderText = "Virtual Meeting URL";
-            textBox3.Size = new Size(253, 23);
-            textBox3.TabIndex = 24;
-            // 
-            // richTextBox1
-            // 
-            richTextBox1.Location = new Point(12, 303);
-            richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(328, 135);
-            richTextBox1.TabIndex = 26;
-            richTextBox1.Text = "";
+            rtbAppointmentDetails.Location = new Point(12, 273);
+            rtbAppointmentDetails.Name = "rtbAppointmentDetails";
+            rtbAppointmentDetails.Size = new Size(328, 135);
+            rtbAppointmentDetails.TabIndex = 26;
+            rtbAppointmentDetails.Text = "";
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(12, 285);
+            label7.Location = new Point(12, 255);
             label7.Name = "label7";
             label7.Size = new Size(115, 15);
             label7.TabIndex = 27;
             label7.Text = "Appointment details";
             // 
-            // Appointment
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(12, 194);
+            label8.Name = "label8";
+            label8.Size = new Size(49, 15);
+            label8.TabIndex = 28;
+            label8.Text = "Located";
+            // 
+            // rabInPerson
+            // 
+            this.rabInPerson.AutoSize = true;
+            this.rabInPerson.Location = new Point(67, 180);
+            this.rabInPerson.Name = "rabInPerson";
+            this.rabInPerson.Size = new Size(87, 19);
+            this.rabInPerson.TabIndex = 29;
+            this.rabInPerson.TabStop = true;
+            this.rabInPerson.Text = "in person at";
+            this.rabInPerson.UseVisualStyleBackColor = true;
+            // 
+            // rabVirtually
+            // 
+            rabVirtually.AutoSize = true;
+            rabVirtually.Location = new Point(67, 205);
+            rabVirtually.Name = "rabVirtually";
+            rabVirtually.Size = new Size(80, 19);
+            rabVirtually.TabIndex = 30;
+            rabVirtually.TabStop = true;
+            rabVirtually.Text = "virtually at";
+            rabVirtually.UseVisualStyleBackColor = true;
+            // 
+            // AppointmentForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(353, 450);
+            ClientSize = new Size(353, 424);
+            Controls.Add(rabVirtually);
+            Controls.Add(this.rabInPerson);
+            Controls.Add(label8);
             Controls.Add(label7);
-            Controls.Add(richTextBox1);
-            Controls.Add(textBox3);
-            Controls.Add(comboBox2);
-            Controls.Add(label6);
-            Controls.Add(label5);
-            Controls.Add(comboBox1);
-            Controls.Add(dateTimePicker3);
-            Controls.Add(dateTimePicker2);
-            Controls.Add(dateTimePicker1);
+            Controls.Add(rtbAppointmentDetails);
+            Controls.Add(txtVirtualMeetingURL);
+            Controls.Add(cmbLocationCity);
+            Controls.Add(cmbAppointmentType);
+            Controls.Add(dtpEndTime);
+            Controls.Add(dtlpStartTime);
+            Controls.Add(dtpDate);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(lblCustomerForm);
             Controls.Add(cmbCustomer);
-            Name = "Appointment";
+            Name = "AppointmentForm";
             Text = "Appointment";
+            Load += Form_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -219,15 +235,17 @@
         private Label label2;
         private Label label3;
         private Label label4;
-        private DateTimePicker dateTimePicker1;
-        private DateTimePicker dateTimePicker2;
-        private DateTimePicker dateTimePicker3;
-        private ComboBox comboBox1;
-        private Label label5;
+        private DateTimePicker dtpDate;
+        private DateTimePicker dtlpStartTime;
+        private DateTimePicker dtpEndTime;
+        private ComboBox cmbAppointmentType;
         private Label label6;
-        private ComboBox comboBox2;
-        private TextBox textBox3;
-        private RichTextBox richTextBox1;
+        private ComboBox cmbLocationCity;
+        private TextBox txtVirtualMeetingURL;
+        private RichTextBox rtbAppointmentDetails;
         private Label label7;
+        private Label label8;
+        private RadioButton rabInPerson;
+        private RadioButton rabVirtually;
     }
 }
