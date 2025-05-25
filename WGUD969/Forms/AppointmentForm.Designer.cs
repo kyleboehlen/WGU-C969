@@ -30,12 +30,12 @@
         {
             cmbCustomer = new ComboBox();
             lblCustomerForm = new Label();
-            label1 = new Label();
+            lblDate = new Label();
             label2 = new Label();
             label3 = new Label();
-            label4 = new Label();
+            lblType = new Label();
             dtpDate = new DateTimePicker();
-            dtlpStartTime = new DateTimePicker();
+            dtpStartTime = new DateTimePicker();
             dtpEndTime = new DateTimePicker();
             cmbAppointmentType = new ComboBox();
             cmbLocationCity = new ComboBox();
@@ -45,16 +45,20 @@
             label8 = new Label();
             rabInPerson = new RadioButton();
             rabVirtually = new RadioButton();
+            btnCancel = new Button();
+            btnSave = new Button();
             SuspendLayout();
             // 
             // cmbCustomer
             // 
+            cmbCustomer.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbCustomer.FormattingEnabled = true;
-            cmbCustomer.Items.AddRange(new object[] { "--Select City--" });
+            cmbCustomer.Items.AddRange(new object[] { "--Select Customer--" });
             cmbCustomer.Location = new Point(116, 6);
             cmbCustomer.Name = "cmbCustomer";
             cmbCustomer.Size = new Size(224, 23);
             cmbCustomer.TabIndex = 7;
+            cmbCustomer.SelectedIndexChanged += RunValidation;
             // 
             // lblCustomerForm
             // 
@@ -65,14 +69,14 @@
             lblCustomerForm.TabIndex = 8;
             lblCustomerForm.Text = "Appointment For";
             // 
-            // label1
+            // lblDate
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(12, 64);
-            label1.Name = "label1";
-            label1.Size = new Size(106, 15);
-            label1.TabIndex = 9;
-            label1.Text = "Appointment is on";
+            lblDate.AutoSize = true;
+            lblDate.Location = new Point(12, 64);
+            lblDate.Name = "lblDate";
+            lblDate.Size = new Size(106, 15);
+            lblDate.TabIndex = 9;
+            lblDate.Text = "Appointment is on";
             // 
             // label2
             // 
@@ -92,14 +96,14 @@
             label3.TabIndex = 15;
             label3.Text = "to";
             // 
-            // label4
+            // lblType
             // 
-            label4.AutoSize = true;
-            label4.Location = new Point(12, 152);
-            label4.Name = "label4";
-            label4.Size = new Size(89, 15);
-            label4.TabIndex = 16;
-            label4.Text = "Appointment is";
+            lblType.AutoSize = true;
+            lblType.Location = new Point(12, 152);
+            lblType.Name = "lblType";
+            lblType.Size = new Size(89, 15);
+            lblType.TabIndex = 16;
+            lblType.Text = "Appointment is";
             // 
             // dtpDate
             // 
@@ -107,14 +111,16 @@
             dtpDate.Name = "dtpDate";
             dtpDate.Size = new Size(216, 23);
             dtpDate.TabIndex = 17;
+            dtpDate.ValueChanged += RunValidation;
             // 
-            // dtlpStartTime
+            // dtpStartTime
             // 
-            dtlpStartTime.Format = DateTimePickerFormat.Time;
-            dtlpStartTime.Location = new Point(51, 88);
-            dtlpStartTime.Name = "dtlpStartTime";
-            dtlpStartTime.Size = new Size(114, 23);
-            dtlpStartTime.TabIndex = 18;
+            dtpStartTime.Format = DateTimePickerFormat.Time;
+            dtpStartTime.Location = new Point(51, 88);
+            dtpStartTime.Name = "dtpStartTime";
+            dtpStartTime.Size = new Size(114, 23);
+            dtpStartTime.TabIndex = 18;
+            dtpStartTime.ValueChanged += RunValidation;
             // 
             // dtpEndTime
             // 
@@ -123,23 +129,28 @@
             dtpEndTime.Name = "dtpEndTime";
             dtpEndTime.Size = new Size(114, 23);
             dtpEndTime.TabIndex = 19;
+            dtpEndTime.ValueChanged += RunValidation;
             // 
             // cmbAppointmentType
             // 
+            cmbAppointmentType.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbAppointmentType.FormattingEnabled = true;
             cmbAppointmentType.Items.AddRange(new object[] { "Presentation", "Scrum" });
             cmbAppointmentType.Location = new Point(108, 149);
             cmbAppointmentType.Name = "cmbAppointmentType";
             cmbAppointmentType.Size = new Size(232, 23);
             cmbAppointmentType.TabIndex = 20;
+            cmbAppointmentType.SelectedIndexChanged += RunValidation;
             // 
             // cmbLocationCity
             // 
+            cmbLocationCity.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbLocationCity.FormattingEnabled = true;
             cmbLocationCity.Location = new Point(160, 176);
             cmbLocationCity.Name = "cmbLocationCity";
             cmbLocationCity.Size = new Size(180, 23);
             cmbLocationCity.TabIndex = 23;
+            cmbLocationCity.SelectedIndexChanged += RunValidation;
             // 
             // txtVirtualMeetingURL
             // 
@@ -149,6 +160,7 @@
             txtVirtualMeetingURL.PlaceholderText = "Virtual Meeting URL";
             txtVirtualMeetingURL.Size = new Size(187, 23);
             txtVirtualMeetingURL.TabIndex = 24;
+            txtVirtualMeetingURL.TextChanged += RunValidation;
             // 
             // rtbAppointmentDetails
             // 
@@ -178,14 +190,16 @@
             // 
             // rabInPerson
             // 
-            this.rabInPerson.AutoSize = true;
-            this.rabInPerson.Location = new Point(67, 180);
-            this.rabInPerson.Name = "rabInPerson";
-            this.rabInPerson.Size = new Size(87, 19);
-            this.rabInPerson.TabIndex = 29;
-            this.rabInPerson.TabStop = true;
-            this.rabInPerson.Text = "in person at";
-            this.rabInPerson.UseVisualStyleBackColor = true;
+            rabInPerson.AutoSize = true;
+            rabInPerson.Checked = true;
+            rabInPerson.Location = new Point(67, 180);
+            rabInPerson.Name = "rabInPerson";
+            rabInPerson.Size = new Size(87, 19);
+            rabInPerson.TabIndex = 29;
+            rabInPerson.TabStop = true;
+            rabInPerson.Text = "in person at";
+            rabInPerson.UseVisualStyleBackColor = true;
+            rabInPerson.CheckedChanged += rabInPerson_CheckedChanged;
             // 
             // rabVirtually
             // 
@@ -194,17 +208,39 @@
             rabVirtually.Name = "rabVirtually";
             rabVirtually.Size = new Size(80, 19);
             rabVirtually.TabIndex = 30;
-            rabVirtually.TabStop = true;
             rabVirtually.Text = "virtually at";
             rabVirtually.UseVisualStyleBackColor = true;
+            // 
+            // btnCancel
+            // 
+            btnCancel.Enabled = false;
+            btnCancel.Location = new Point(267, 427);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(75, 23);
+            btnCancel.TabIndex = 32;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
+            // 
+            // btnSave
+            // 
+            btnSave.Location = new Point(186, 429);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(75, 23);
+            btnSave.TabIndex = 31;
+            btnSave.Text = "Save";
+            btnSave.UseVisualStyleBackColor = true;
+            btnSave.Click += btnSave_Click;
             // 
             // AppointmentForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(353, 424);
+            ClientSize = new Size(353, 464);
+            Controls.Add(btnCancel);
+            Controls.Add(btnSave);
             Controls.Add(rabVirtually);
-            Controls.Add(this.rabInPerson);
+            Controls.Add(rabInPerson);
             Controls.Add(label8);
             Controls.Add(label7);
             Controls.Add(rtbAppointmentDetails);
@@ -212,12 +248,12 @@
             Controls.Add(cmbLocationCity);
             Controls.Add(cmbAppointmentType);
             Controls.Add(dtpEndTime);
-            Controls.Add(dtlpStartTime);
+            Controls.Add(dtpStartTime);
             Controls.Add(dtpDate);
-            Controls.Add(label4);
+            Controls.Add(lblType);
             Controls.Add(label3);
             Controls.Add(label2);
-            Controls.Add(label1);
+            Controls.Add(lblDate);
             Controls.Add(lblCustomerForm);
             Controls.Add(cmbCustomer);
             Name = "AppointmentForm";
@@ -231,12 +267,12 @@
 
         private ComboBox cmbCustomer;
         private Label lblCustomerForm;
-        private Label label1;
+        private Label lblDate;
         private Label label2;
         private Label label3;
-        private Label label4;
+        private Label lblType;
         private DateTimePicker dtpDate;
-        private DateTimePicker dtlpStartTime;
+        private DateTimePicker dtpStartTime;
         private DateTimePicker dtpEndTime;
         private ComboBox cmbAppointmentType;
         private Label label6;
@@ -247,5 +283,7 @@
         private Label label8;
         private RadioButton rabInPerson;
         private RadioButton rabVirtually;
+        private Button btnCancel;
+        private Button btnSave;
     }
 }

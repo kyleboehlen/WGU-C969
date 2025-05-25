@@ -14,8 +14,8 @@ namespace WGUD969.Factories
     { }
     public class CustomerFactory : ICustomerFactory
     {
-        public readonly IAuthService _AuthService;
-        public readonly IServiceProvider _ServiceProvider;
+        private readonly IAuthService _AuthService;
+        private readonly IServiceProvider _ServiceProvider;
         public CustomerFactory(IAuthService authService, IServiceProvider serviceProvider)
         {
             _AuthService = authService;

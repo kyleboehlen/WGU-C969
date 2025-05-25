@@ -62,6 +62,7 @@ namespace WGUD969
             services.AddSingleton<ICryptographyService, CryptographyService>();
             services.AddSingleton<ICityService, CityService>();
             services.AddSingleton<ITimezoneService, TimezoneService>();
+            services.AddSingleton<ICustomerService, CustomerService>();
 
             // DATA ACCESS LAYER
             services.AddSingleton<IMySqlConnectionFactory, MySqlConnectionFactory>();
@@ -79,7 +80,9 @@ namespace WGUD969
             services.AddTransient<IDAO<CountryDTO>, CountryDAO>();
             services.AddSingleton<ICustomerRepository, CustomerRepository>();
             services.AddTransient<IDAO<CustomerDTO>, CustomerDAO>();
-            services.AddSingleton<IDAO<AddressDTO>, AddressDAO>();
+            services.AddTransient<IDAO<AddressDTO>, AddressDAO>();
+            services.AddSingleton<IAppointmentRepository, AppointmentRepository>();
+            services.AddTransient<IDAO<AppointmentDTO>, AppointmentDAO>();
 
             // FACTORIES
             services.AddSingleton<UserFactory>();
@@ -97,6 +100,9 @@ namespace WGUD969
             services.AddSingleton<AddressFactory>();
             services.AddTransient<IAddressFactory>(provider => provider.GetRequiredService<AddressFactory>());
             services.AddTransient<IDefaultDTOFactory<AddressDTO>>(provider => provider.GetRequiredService<AddressFactory>());
+            services.AddSingleton<AppointmentFactory>();
+            services.AddTransient<IAppointmentFactory>(provider => provider.GetRequiredService<AppointmentFactory>());
+            services.AddTransient<IDefaultDTOFactory<AppointmentDTO>>(provider => provider.GetRequiredService<AppointmentFactory>());
 
             // Models
             services.AddTransient<IUser, User>();
@@ -104,6 +110,7 @@ namespace WGUD969
             services.AddTransient<ICity, City>();
             services.AddTransient<ICustomer, Customer>();
             services.AddTransient<IAddress, Address>();
+            services.AddTransient<IAppointment, Appointment>();
 
             // FORMS
             services.AddTransient<Login>();
