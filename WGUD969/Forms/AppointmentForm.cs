@@ -161,8 +161,15 @@ namespace WGUD969.Forms
             _Appointment.CustomerId = int.Parse(cmbCustomer.SelectedValue.ToString());
             _Appointment.Start = dtpDate.Value.Date + dtpStartTime.Value.TimeOfDay;
             _Appointment.End = dtpDate.Value.Date + dtpEndTime.Value.TimeOfDay;
-            _Appointment.Type = cmbAppointmentType.SelectedText;
-            _Appointment.CityLocation = rabInPerson.Checked ? cmbLocationCity.SelectedText : "not needed";
+            _Appointment.Type = cmbAppointmentType.SelectedItem.ToString();
+            if (rabInPerson.Checked) {
+                dynamic cityLocation = cmbLocationCity.SelectedItem;
+                _Appointment.CityLocation = cityLocation.Name;
+            }
+            else
+            {
+                _Appointment.CityLocation = "not needed";
+            }
             _Appointment.URL = rabVirtually.Checked ? txtVirtualMeetingURL.Text : "not needed";
             _Appointment.Description = rtbAppointmentDetails.Text;
             await _AppointmentRepository.CreateAsync(_Appointment);
