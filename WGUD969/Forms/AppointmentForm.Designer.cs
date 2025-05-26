@@ -118,6 +118,7 @@
             dtpStartTime.Format = DateTimePickerFormat.Time;
             dtpStartTime.Location = new Point(51, 88);
             dtpStartTime.Name = "dtpStartTime";
+            dtpStartTime.ShowUpDown = true;
             dtpStartTime.Size = new Size(114, 23);
             dtpStartTime.TabIndex = 18;
             dtpStartTime.ValueChanged += RunValidation;
@@ -127,6 +128,7 @@
             dtpEndTime.Format = DateTimePickerFormat.Time;
             dtpEndTime.Location = new Point(226, 88);
             dtpEndTime.Name = "dtpEndTime";
+            dtpEndTime.ShowUpDown = true;
             dtpEndTime.Size = new Size(114, 23);
             dtpEndTime.TabIndex = 19;
             dtpEndTime.ValueChanged += RunValidation;
@@ -257,7 +259,7 @@
             Controls.Add(lblCustomerForm);
             Controls.Add(cmbCustomer);
             Name = "AppointmentForm";
-            Text = "Appointment";
+            Text = "ee";
             Load += Form_Load;
             ResumeLayout(false);
             PerformLayout();

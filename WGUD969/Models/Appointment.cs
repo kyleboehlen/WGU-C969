@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WGUD969.Database.DTO;
+using WGUD969.Database.Repositories;
 using WGUD969.Factories;
+using WGUD969.Services;
 
 namespace WGUD969.Models
 {
@@ -19,10 +21,14 @@ namespace WGUD969.Models
         string CityLocation { get; set; }
         string URL { get; set; }
         string Description { get; set; }
+        ICustomer Customer { get; }
+        Task HydrateCustomer(List<ICustomer>? customers);
     }
     public class Appointment : IAppointment
     {
         private readonly IAppointmentFactory _AppointmentFactory;
+        private readonly ITimezoneService _TimezoneService;
+        private readonly ICustomerRepository _CustomerRepository;
         public int Id { get; private set; }
         public int CustomerId { get; set; }
         public int UserId { get; set; }
@@ -36,10 +42,13 @@ namespace WGUD969.Models
         public DateTime? UpdatedOn { get; private set; }
         public string CreatedBy { get; private set; }
         public string UpdatedBy { get; private set; }
+        public ICustomer Customer { get; private set; }
 
-        public Appointment(IAppointmentFactory appointmentFactory)
+        public Appointment(IAppointmentFactory appointmentFactory, ITimezoneService timezoneService, ICustomerRepository customerRepository)
         {
             _AppointmentFactory = appointmentFactory;
+            _TimezoneService = timezoneService;
+            _CustomerRepository = customerRepository;
         }
 
         public void Initialize(AppointmentDTO dto)
@@ -47,8 +56,8 @@ namespace WGUD969.Models
             Id = dto.appointmentId;
             CustomerId = dto.customerId;
             UserId = dto.userId;
-            Start = dto.start;
-            End = dto.end;
+            Start = _TimezoneService.ConvertFromUTC(dto.start);
+            End = _TimezoneService.ConvertFromUTC(dto.end);
             Type = dto.type;
             CityLocation = dto.location;
             URL = dto.url;
@@ -64,8 +73,8 @@ namespace WGUD969.Models
             appointmentDTO.appointmentId = Id;
             appointmentDTO.customerId = CustomerId;
             appointmentDTO.userId = UserId;
-            appointmentDTO.start = Start;
-            appointmentDTO.end = End;
+            appointmentDTO.start = _TimezoneService.ConvertToUTC(Start);
+            appointmentDTO.end = _TimezoneService.ConvertToUTC(End);
             appointmentDTO.type = Type;
             appointmentDTO.location = CityLocation;
             appointmentDTO.url = URL;
@@ -74,6 +83,18 @@ namespace WGUD969.Models
             appointmentDTO.lastUpdate = UpdatedOn;
             appointmentDTO.lastUpdateBy = UpdatedBy;
             return appointmentDTO;
+        }
+
+        public async Task HydrateCustomer(List<ICustomer>? customers = null)
+        {
+            if (customers != null)
+            {
+                Customer = customers.First(country => country.Id == CustomerId);
+            }
+            else
+            {
+                Customer = await _CustomerRepository.GetByIdAsync(CustomerId);
+            }
         }
     }
 }

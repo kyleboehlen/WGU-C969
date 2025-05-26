@@ -14,10 +14,13 @@ namespace WGUD969.Database.DAO
     {
         private readonly IExceptionHandlingService _ExceptionHandler;
         private readonly IMySqlConnectionFactory _ConnectionFactory;
-        public AppointmentDAO(IExceptionHandlingService exceptionHandler, IMySqlConnectionFactory connectionFactory)
+        private readonly IDTOMappingService<AppointmentDTO> _DTOMapper;
+
+        public AppointmentDAO(IExceptionHandlingService exceptionHandler, IMySqlConnectionFactory connectionFactory, IDTOMappingService<AppointmentDTO> dTOMapper)
         {
             _ExceptionHandler = exceptionHandler;
             _ConnectionFactory = connectionFactory;
+            _DTOMapper = dTOMapper;
         }
         public async Task<int> CreateAsync(AppointmentDTO dto)
         {
@@ -76,9 +79,38 @@ namespace WGUD969.Database.DAO
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<AppointmentDTO>> GetAllAsync()
+        public async Task<IEnumerable<AppointmentDTO>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _ExceptionHandler.ExecuteAsync<IEnumerable<AppointmentDTO>>(
+                async () =>
+                {
+                    var appointments = new List<AppointmentDTO>();
+
+                    using (var connection = _ConnectionFactory.CreateConnection())
+                    {
+                        await connection.OpenAsync();
+
+                        string query = @"SELECT * FROM appointment;";
+
+                        using (var command = connection.CreateCommand())
+                        {
+                            command.CommandText = query;
+
+                            using (var reader = await command.ExecuteReaderAsync())
+                            {
+                                while (await reader.ReadAsync())
+                                {
+                                    var appointmentDTO = _DTOMapper.MapToDTO(reader);
+                                    appointments.Add(appointmentDTO);
+                                }
+                            }
+                        }
+                    }
+
+                    return appointments;
+                },
+                "AppointmentDAO.GetAllAsync()"
+            );
         }
 
         public Task<AppointmentDTO?> GetByIdAsync(int id)

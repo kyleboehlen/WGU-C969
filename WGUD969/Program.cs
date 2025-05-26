@@ -57,12 +57,14 @@ namespace WGUD969
             services.AddSingleton<IDTOMappingService<CountryDTO>, DTOMappingService<CountryDTO>>();
             services.AddSingleton<IDTOMappingService<AddressDTO>, DTOMappingService<AddressDTO>>();
             services.AddSingleton<IDTOMappingService<CustomerDTO>, DTOMappingService<CustomerDTO>>();
+            services.AddSingleton<IDTOMappingService<AppointmentDTO>, DTOMappingService<AppointmentDTO>>();
             services.AddSingleton<ILocationService, LocationService>();
             services.AddSingleton<ITranslationService, TranslationService>();
             services.AddSingleton<ICryptographyService, CryptographyService>();
             services.AddSingleton<ICityService, CityService>();
             services.AddSingleton<ITimezoneService, TimezoneService>();
             services.AddSingleton<ICustomerService, CustomerService>();
+            services.AddSingleton<IAppointmentService, AppointmentService>();
 
             // DATA ACCESS LAYER
             services.AddSingleton<IMySqlConnectionFactory, MySqlConnectionFactory>();

@@ -25,12 +25,13 @@ namespace WGUD969.Forms
         private readonly IAddressFactory _AddressFactory;
         private readonly ICustomerRepository _CustomerRepository;
         private readonly ITimezoneService _TimezoneService;
+        private readonly IAppointmentService _AppointmentService;
         private List<TextBox> requiredTextFields = new List<TextBox>();
         private ICustomer _Customer;
         private IAddress _Address;
         public Dashboard(IServiceProvider serviceProvider, ICityService cityService, ICityRepository cityRepository,
             ICustomerFactory customerFactory, IAddressFactory addressFactory, ICustomerRepository customerRepository,
-            ITimezoneService timezoneService)
+            ITimezoneService timezoneService, IAppointmentService appointmentService)
         {
             _ServiceProvider = serviceProvider;
             _CityService = cityService;
@@ -39,6 +40,7 @@ namespace WGUD969.Forms
             _AddressFactory = addressFactory;
             _CustomerRepository = customerRepository;
             _TimezoneService = timezoneService;
+            _AppointmentService = appointmentService;
 
             InitializeComponent();
 
@@ -64,6 +66,8 @@ namespace WGUD969.Forms
             validateRequiredTextBox();
 
             await RefreshCustomerList();
+
+            await RefreshAppointmentList(null);
         }
 
         private void OnTextBoxValueChange(object sender, EventArgs e)
@@ -126,6 +130,27 @@ namespace WGUD969.Forms
                 int rowIndex = dgvCustomers.Rows.Add();
                 UpdateDGVRow(customer, rowIndex);
             }
+        }
+
+        private async Task RefreshAppointmentList(DateTime? date)
+        {
+            dgvAppointments.Rows.Clear();
+            List<IAppointment> appointments = await _AppointmentService.FilterByDate(date);
+            foreach (IAppointment appointment in appointments)
+            {
+                int rowIndex = dgvAppointments.Rows.Add();
+                DataGridViewRow row = dgvAppointments.Rows[(int)rowIndex];
+                row.Cells["Customer"].Value = appointment.Customer.Name;
+                row.Cells["Type"].Value = appointment.Type;
+                row.Cells["From"].Value = appointment.Start.TimeOfDay.ToString();
+                row.Cells["To"].Value = appointment.End.TimeOfDay.ToString();
+                row.Tag = appointment;
+            }
+        }
+
+        private async Task monthCalendar_OnDateChange(object sender, EventArgs e)
+        {
+            await RefreshAppointmentList(monthCalendar.SelectionStart);
         }
 
         public void UpdateDGVRow(ICustomer customer, int? index = null)

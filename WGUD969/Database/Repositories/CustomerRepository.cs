@@ -15,6 +15,7 @@ namespace WGUD969.Database.Repositories
         public Task<List<ICustomer>> GetAllWithAddressesAsync();
         public Task<ICustomer> CreateOrUpdateWithAddressAsync(ICustomer customer, IAddress address);
         public Task<bool> DeleteAsync(ICustomer customer);
+        public Task<ICustomer> GetByIdAsync(int id);
     }
     public class CustomerRepository : ICustomerRepository
     {
@@ -90,6 +91,11 @@ namespace WGUD969.Database.Repositories
         public async Task<bool> DeleteAsync(ICustomer customer)
         {
             return await _CustomerDAO.DeleteByIdAsync(customer.Id);
+        }
+
+        public async Task<ICustomer> GetByIdAsync(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

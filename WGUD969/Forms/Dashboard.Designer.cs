@@ -30,14 +30,15 @@
         {
             tbcMainView = new TabControl();
             tbpAppointments = new TabPage();
+            lblLocalTimezone = new Label();
             btnDeleteAppointment = new Button();
             monthCalendar = new MonthCalendar();
             btnEditAppointment = new Button();
-            dataGridView1 = new DataGridView();
-            dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn4 = new DataGridViewTextBoxColumn();
+            dgvAppointments = new DataGridView();
+            Type = new DataGridViewTextBoxColumn();
+            Customer = new DataGridViewTextBoxColumn();
+            From = new DataGridViewTextBoxColumn();
+            To = new DataGridViewTextBoxColumn();
             btnAddNewAppointment = new Button();
             tbpCustomers = new TabPage();
             dgvCustomers = new DataGridView();
@@ -58,10 +59,9 @@
             btnCustomerSave = new Button();
             btnAddCustomer = new Button();
             tbpReports = new TabPage();
-            lblLocalTimezone = new Label();
             tbcMainView.SuspendLayout();
             tbpAppointments.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvAppointments).BeginInit();
             tbpCustomers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvCustomers).BeginInit();
             SuspendLayout();
@@ -83,7 +83,7 @@
             tbpAppointments.Controls.Add(btnDeleteAppointment);
             tbpAppointments.Controls.Add(monthCalendar);
             tbpAppointments.Controls.Add(btnEditAppointment);
-            tbpAppointments.Controls.Add(dataGridView1);
+            tbpAppointments.Controls.Add(dgvAppointments);
             tbpAppointments.Controls.Add(btnAddNewAppointment);
             tbpAppointments.Location = new Point(4, 24);
             tbpAppointments.Name = "tbpAppointments";
@@ -92,6 +92,15 @@
             tbpAppointments.TabIndex = 0;
             tbpAppointments.Text = "Appointments";
             tbpAppointments.UseVisualStyleBackColor = true;
+            // 
+            // lblLocalTimezone
+            // 
+            lblLocalTimezone.AutoSize = true;
+            lblLocalTimezone.Location = new Point(12, 10);
+            lblLocalTimezone.Name = "lblLocalTimezone";
+            lblLocalTimezone.Size = new Size(141, 15);
+            lblLocalTimezone.TabIndex = 17;
+            lblLocalTimezone.Text = "Your current timezone is: ";
             // 
             // btnDeleteAppointment
             // 
@@ -118,43 +127,43 @@
             btnEditAppointment.Text = "Edit";
             btnEditAppointment.UseVisualStyleBackColor = true;
             // 
-            // dataGridView1
+            // dgvAppointments
             // 
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn3, dataGridViewTextBoxColumn4 });
-            dataGridView1.Location = new Point(268, 6);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
-            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(448, 234);
-            dataGridView1.TabIndex = 14;
+            dgvAppointments.AllowUserToAddRows = false;
+            dgvAppointments.AllowUserToDeleteRows = false;
+            dgvAppointments.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvAppointments.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvAppointments.Columns.AddRange(new DataGridViewColumn[] { Type, Customer, From, To });
+            dgvAppointments.Location = new Point(268, 6);
+            dgvAppointments.Name = "dgvAppointments";
+            dgvAppointments.ReadOnly = true;
+            dgvAppointments.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvAppointments.Size = new Size(448, 234);
+            dgvAppointments.TabIndex = 14;
             // 
-            // dataGridViewTextBoxColumn1
+            // Type
             // 
-            dataGridViewTextBoxColumn1.HeaderText = "Name";
-            dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            dataGridViewTextBoxColumn1.ReadOnly = true;
+            Type.HeaderText = "Appointment";
+            Type.Name = "Type";
+            Type.ReadOnly = true;
             // 
-            // dataGridViewTextBoxColumn2
+            // Customer
             // 
-            dataGridViewTextBoxColumn2.HeaderText = "Phone";
-            dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            dataGridViewTextBoxColumn2.ReadOnly = true;
+            Customer.HeaderText = "With";
+            Customer.Name = "Customer";
+            Customer.ReadOnly = true;
             // 
-            // dataGridViewTextBoxColumn3
+            // From
             // 
-            dataGridViewTextBoxColumn3.HeaderText = "City";
-            dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            dataGridViewTextBoxColumn3.ReadOnly = true;
+            From.HeaderText = "From";
+            From.Name = "From";
+            From.ReadOnly = true;
             // 
-            // dataGridViewTextBoxColumn4
+            // To
             // 
-            dataGridViewTextBoxColumn4.HeaderText = "Zip Code";
-            dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            dataGridViewTextBoxColumn4.ReadOnly = true;
+            To.HeaderText = "To";
+            To.Name = "To";
+            To.ReadOnly = true;
             // 
             // btnAddNewAppointment
             // 
@@ -355,15 +364,6 @@
             tbpReports.Text = "Reports";
             tbpReports.UseVisualStyleBackColor = true;
             // 
-            // lblLocalTimezone
-            // 
-            lblLocalTimezone.AutoSize = true;
-            lblLocalTimezone.Location = new Point(12, 10);
-            lblLocalTimezone.Name = "lblLocalTimezone";
-            lblLocalTimezone.Size = new Size(141, 15);
-            lblLocalTimezone.TabIndex = 17;
-            lblLocalTimezone.Text = "Your current timezone is: ";
-            // 
             // Dashboard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -377,7 +377,7 @@
             tbcMainView.ResumeLayout(false);
             tbpAppointments.ResumeLayout(false);
             tbpAppointments.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvAppointments).EndInit();
             tbpCustomers.ResumeLayout(false);
             tbpCustomers.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvCustomers).EndInit();
@@ -407,15 +407,15 @@
         private DataGridViewTextBoxColumn PhoneNumber;
         private DataGridViewTextBoxColumn City;
         private DataGridViewTextBoxColumn PostalCode;
-        private DataGridView dataGridView1;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private DataGridView dgvAppointments;
         private Button btnAddNewAppointment;
         private Button btnDeleteAppointment;
         private Button btnEditAppointment;
         private TabPage tbpReports;
         private Label lblLocalTimezone;
+        private DataGridViewTextBoxColumn Type;
+        private DataGridViewTextBoxColumn Customer;
+        private DataGridViewTextBoxColumn From;
+        private DataGridViewTextBoxColumn To;
     }
 }
