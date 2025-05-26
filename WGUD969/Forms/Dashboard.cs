@@ -26,12 +26,13 @@ namespace WGUD969.Forms
         private readonly ICustomerRepository _CustomerRepository;
         private readonly ITimezoneService _TimezoneService;
         private readonly IAppointmentService _AppointmentService;
+        private readonly IAppointmentRepository _AppointmentRepository;
         private List<TextBox> requiredTextFields = new List<TextBox>();
         private ICustomer _Customer;
         private IAddress _Address;
         public Dashboard(IServiceProvider serviceProvider, ICityService cityService, ICityRepository cityRepository,
             ICustomerFactory customerFactory, IAddressFactory addressFactory, ICustomerRepository customerRepository,
-            ITimezoneService timezoneService, IAppointmentService appointmentService)
+            ITimezoneService timezoneService, IAppointmentService appointmentService, IAppointmentRepository appointmentRepository)
         {
             _ServiceProvider = serviceProvider;
             _CityService = cityService;
@@ -41,6 +42,7 @@ namespace WGUD969.Forms
             _CustomerRepository = customerRepository;
             _TimezoneService = timezoneService;
             _AppointmentService = appointmentService;
+            _AppointmentRepository = appointmentRepository;
 
             InitializeComponent();
 
@@ -135,7 +137,7 @@ namespace WGUD969.Forms
         private async Task RefreshAppointmentList(DateTime? date)
         {
             dgvAppointments.Rows.Clear();
-            List<IAppointment> appointments = await _AppointmentService.FilterByDate(date);
+            List<IAppointment> appointments = await _AppointmentService.FilterByDate(date ?? DateTime.Now);
             foreach (IAppointment appointment in appointments)
             {
                 int rowIndex = dgvAppointments.Rows.Add();
@@ -146,11 +148,6 @@ namespace WGUD969.Forms
                 row.Cells["To"].Value = appointment.End.TimeOfDay.ToString();
                 row.Tag = appointment;
             }
-        }
-
-        private async Task monthCalendar_OnDateChange(object sender, EventArgs e)
-        {
-            await RefreshAppointmentList(monthCalendar.SelectionStart);
         }
 
         public void UpdateDGVRow(ICustomer customer, int? index = null)
@@ -276,6 +273,22 @@ namespace WGUD969.Forms
         private void btnAddNewAppointment_Click(object sender, EventArgs e)
         {
             _ServiceProvider.GetRequiredService<AppointmentForm>().Show();
+        }
+
+        private async void monthCalendar_DateChanged(object sender, DateRangeEventArgs e)
+        {
+            await RefreshAppointmentList(monthCalendar.SelectionStart);
+        }
+
+        private void dgvAppointments_SelectionChanged(object sender, EventArgs e)
+        {
+            btnEditAppointment.Enabled = btnDeleteAppointment.Enabled = dgvAppointments.SelectedRows.Count > 0;
+        }
+
+        private async void btnDeleteAppointment_Click(object sender, EventArgs e)
+        {
+            await _AppointmentRepository.DeleteAsync((IAppointment) dgvAppointments.SelectedRows[0].Tag);
+            await RefreshAppointmentList(monthCalendar.SelectionStart);
         }
     }
 }

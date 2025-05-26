@@ -35,7 +35,8 @@ namespace WGUD969.Services
             {
                 return _Appointments;
             }
-            throw new NotImplementedException();
+            
+            return _Appointments.Where(a => a.Start.Date == date.Value.Date).ToList();
         }
     }
 }

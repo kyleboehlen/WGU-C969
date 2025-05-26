@@ -14,6 +14,7 @@ namespace WGUD969.Database.Repositories
     {
         public Task CreateAsync(IAppointment appointment);
         public Task<List<IAppointment>> GetAllWithCustomerAsync();
+        public Task<bool> DeleteAsync(IAppointment appointment);
     }
 
     public class AppointmentRepository : IAppointmentRepository
@@ -46,6 +47,11 @@ namespace WGUD969.Database.Repositories
                 appointment.HydrateCustomer(customers);
                 return appointment;
             }).ToList();
+        }
+
+        public async Task<bool> DeleteAsync(IAppointment appointment)
+        {
+            return await _AppointmentDAO.DeleteByIdAsync(appointment.Id);
         }
     }
 }

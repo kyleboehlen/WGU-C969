@@ -111,12 +111,14 @@
             btnDeleteAppointment.TabIndex = 16;
             btnDeleteAppointment.Text = "Delete";
             btnDeleteAppointment.UseVisualStyleBackColor = true;
+            btnDeleteAppointment.Click += btnDeleteAppointment_Click;
             // 
             // monthCalendar
             // 
             monthCalendar.Location = new Point(12, 41);
             monthCalendar.Name = "monthCalendar";
             monthCalendar.TabIndex = 0;
+            monthCalendar.DateChanged += monthCalendar_DateChanged;
             // 
             // btnEditAppointment
             // 
@@ -140,6 +142,7 @@
             dgvAppointments.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvAppointments.Size = new Size(448, 234);
             dgvAppointments.TabIndex = 14;
+            dgvAppointments.SelectionChanged += dgvAppointments_SelectionChanged;
             // 
             // Type
             // 
