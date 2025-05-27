@@ -200,7 +200,7 @@ namespace WGUD969.Forms
             }
             _Appointment.URL = rabVirtually.Checked ? txtVirtualMeetingURL.Text : "not needed";
             _Appointment.Description = rtbAppointmentDetails.Text;
-            await _AppointmentRepository.CreateAsync(_Appointment);
+            await _AppointmentRepository.CreateOrUpdateAsync(_Appointment);
             this.Close();
         }
     }

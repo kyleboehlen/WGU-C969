@@ -138,9 +138,51 @@ namespace WGUD969.Database.DAO
             throw new NotImplementedException();
         }
 
-        public Task<bool> UpdateAsync(AppointmentDTO dto)
+        public async Task<bool> UpdateAsync(AppointmentDTO dto)
         {
-            throw new NotImplementedException();
+            return await _ExceptionHandler.ExecuteAsync<bool>(
+                async () =>
+                {
+                    using (var connection = _ConnectionFactory.CreateConnection())
+                    {
+                        await connection.OpenAsync();
+                        string query = @"
+                                UPDATE appointment
+                                SET 
+                                    appointmentId = @appointmentId,
+                                    customerId = @customerId,
+                                    userId = @userId,
+                                    title = @title,
+                                    description = @description,
+                                    type = @type,
+                                    location = @location,
+                                    contact = @contact,
+                                    url = @url,
+                                    start = @start,
+                                    end = @end,
+                                    lastUpdate = COALESCE(@lastUpdate, NOW()), 
+                                    lastUpdateBy = @lastUpdateBy
+                                WHERE appointmentId = @appointmentId";
+                        using (var command = connection.CreateCommand())
+                        {
+                            command.CommandText = query;
+
+                            // Mapping DTO values to query params, null values are handled in the query
+                            command.Parameters.AddRange(
+                                dto.GetType().GetProperties()
+                                    .Select(prop => new MySqlParameter($"@{prop.Name}", prop.GetValue(dto)))
+                                    .ToArray()
+                            );
+
+                            // Determine success based on rows affected
+                            int rowsAffected = await command.ExecuteNonQueryAsync();
+
+                            return rowsAffected > 0;
+                        }
+                    }
+                },
+                "AppointmentDAO.UpdateAsync()"
+            );
         }
     }
 }

@@ -12,7 +12,7 @@ namespace WGUD969.Database.Repositories
 {
     public interface IAppointmentRepository
     {
-        public Task CreateAsync(IAppointment appointment);
+        public Task CreateOrUpdateAsync(IAppointment appointment);
         public Task<List<IAppointment>> GetAllWithCustomerAsync();
         public Task<bool> DeleteAsync(IAppointment appointment);
     }
@@ -30,10 +30,18 @@ namespace WGUD969.Database.Repositories
             _AppointmentFactory = appointmentFactory;
         }
 
-        public async Task CreateAsync(IAppointment appointment)
+        public async Task CreateOrUpdateAsync(IAppointment appointment)
         {
             AppointmentDTO appointmentDTO = appointment.ToDTO();
-            await _AppointmentDAO.CreateAsync(appointmentDTO);
+            if (appointmentDTO.appointmentId == 0)
+            {
+                await _AppointmentDAO.CreateAsync(appointmentDTO);
+
+            }
+            else
+            {
+                await _AppointmentDAO.UpdateAsync(appointmentDTO);
+            }
         }
 
         public async Task<List<IAppointment>> GetAllWithCustomerAsync()
