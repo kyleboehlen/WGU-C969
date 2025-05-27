@@ -47,6 +47,7 @@
             rabVirtually = new RadioButton();
             btnCancel = new Button();
             btnSave = new Button();
+            lblValidationError = new Label();
             SuspendLayout();
             // 
             // cmbCustomer
@@ -234,11 +235,21 @@
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Click += btnSave_Click;
             // 
+            // lblValidationError
+            // 
+            lblValidationError.AutoSize = true;
+            lblValidationError.ForeColor = Color.IndianRed;
+            lblValidationError.Location = new Point(12, 37);
+            lblValidationError.Name = "lblValidationError";
+            lblValidationError.Size = new Size(0, 15);
+            lblValidationError.TabIndex = 33;
+            // 
             // AppointmentForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(353, 464);
+            Controls.Add(lblValidationError);
             Controls.Add(btnCancel);
             Controls.Add(btnSave);
             Controls.Add(rabVirtually);
@@ -287,5 +298,6 @@
         private RadioButton rabVirtually;
         private Button btnCancel;
         private Button btnSave;
+        private Label lblValidationError;
     }
 }

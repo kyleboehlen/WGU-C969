@@ -21,19 +21,22 @@ namespace WGUD969.Forms
         private readonly ICustomerService _CustomerService;
         private readonly IAppointmentRepository _AppointmentRepository;
         private readonly IAppointmentFactory _AppointmentFactory;
+        private readonly ITimezoneService _TimeZoneService;
+        private readonly IAppointmentService _AppointmentService;
         private IAppointment _Appointment;
 
         public AppointmentForm(ICityService cityService, ICustomerService customerService, IAppointmentRepository appointmentRepository,
-            IAppointmentFactory appointmentFactory)
+            IAppointmentFactory appointmentFactory, ITimezoneService timeZoneService, IAppointmentService appointmentService)
         {
             _CityService = cityService;
             _CustomerService = customerService;
             _AppointmentRepository = appointmentRepository;
             _AppointmentFactory = appointmentFactory;
+            _TimeZoneService = timeZoneService;
+            _AppointmentService = appointmentService;
             _Appointment = _AppointmentFactory.GetDefaultModel();
 
             InitializeComponent();
-
         }
 
         public void SetAppointmentForEdit(IAppointment appointment)
@@ -120,7 +123,7 @@ namespace WGUD969.Forms
             RunValidation(sender, e);
         }
 
-        private void RunValidation(object sender, EventArgs e)
+        private async void RunValidation(object sender, EventArgs e)
         {
             int validationErrors = 0;
             if (cmbCustomer.SelectedIndex < 0)
@@ -144,6 +147,26 @@ namespace WGUD969.Forms
             }
 
             // Check for start time before end time, not between 9-5 EST, overlapping appointments
+            lblValidationError.Text = "";
+            if (dtpStartTime.Value > dtpEndTime.Value)
+            {
+                validationErrors++;
+                lblValidationError.Text = "Start time must be before end time.";
+            }
+
+            if (!_TimeZoneService.CheckIfDateTimeIsDuringBusinessHours(dtpStartTime.Value) ||
+                !_TimeZoneService.CheckIfDateTimeIsDuringBusinessHours(dtpEndTime.Value)) {
+                validationErrors++;
+                lblValidationError.Text = "Appt must occur during business hours (9-5 Mon-Fri EST)";
+            }
+
+            if (await _AppointmentService.HasOverlappingAppointments(dtpDate.Value.Date + dtpStartTime.Value.TimeOfDay) ||
+                await _AppointmentService.HasOverlappingAppointments(dtpDate.Value.Date + dtpEndTime.Value.TimeOfDay))
+            {
+                validationErrors++;
+                lblValidationError.Text = "A current appointment conflicts";
+            }
+
 
             if (cmbAppointmentType.SelectedIndex < 0)
             {

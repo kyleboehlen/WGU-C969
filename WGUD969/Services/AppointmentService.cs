@@ -12,15 +12,18 @@ namespace WGUD969.Services
     {
         public Task Refresh();
         public Task<List<IAppointment>> FilterByDate(DateTime? date);
+        public Task<bool> HasOverlappingAppointments(DateTime dateTime);
     }
     public class AppointmentService : IAppointmentService
     {
         private readonly IAppointmentRepository _AppointmentRepository;
+        private readonly ITimezoneService _TimeZoneService;
         private List<IAppointment> _Appointments;
 
-        public AppointmentService(IAppointmentRepository appointmentRepository)
+        public AppointmentService(IAppointmentRepository appointmentRepository, ITimezoneService timeZoneService)
         {
             _AppointmentRepository = appointmentRepository;
+            _TimeZoneService = timeZoneService;
         }
 
         public async Task Refresh()
@@ -37,6 +40,12 @@ namespace WGUD969.Services
             }
             
             return _Appointments.Where(a => a.Start.Date == date.Value.Date).ToList();
+        }
+
+        public async Task<bool> HasOverlappingAppointments(DateTime dateTime)
+        {
+            await Refresh();
+            return _Appointments.Where(a => dateTime > a.Start && dateTime < a.End).ToList().Count() > 0;
         }
     }
 }
