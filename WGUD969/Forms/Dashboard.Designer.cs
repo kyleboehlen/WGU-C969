@@ -128,6 +128,7 @@
             btnEditAppointment.TabIndex = 15;
             btnEditAppointment.Text = "Edit";
             btnEditAppointment.UseVisualStyleBackColor = true;
+            btnEditAppointment.Click += btnEditAppointment_Click;
             // 
             // dgvAppointments
             // 

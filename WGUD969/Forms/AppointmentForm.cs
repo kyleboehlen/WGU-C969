@@ -36,10 +36,38 @@ namespace WGUD969.Forms
 
         }
 
+        public void SetAppointmentForEdit(IAppointment appointment)
+        {
+            _Appointment = appointment;
+        }
+
         public async void Form_Load(object sender, EventArgs e)
         {
             await SetCustomerList();
             await SetCityList();
+            SetEditAppointmentValues();
+        }
+
+        public void SetEditAppointmentValues()
+        {
+            if (_Appointment != null && _Appointment.Id > 0)
+            {
+                cmbCustomer.SelectedValue = _Appointment.CustomerId;
+                dtpDate.Value = _Appointment.Start;
+                dtpStartTime.Value = _Appointment.Start;
+                dtpEndTime.Value = _Appointment.End;
+                cmbAppointmentType.SelectedIndex = _Appointment.Type == "Scrum" ? 1 : 0;
+                if (_Appointment.CityLocation != null && _Appointment.CityLocation.Length > 0 && _Appointment.CityLocation != "not needed")
+                {
+                    rabInPerson.Checked = true;
+                    cmbLocationCity.SelectedIndex = cmbLocationCity.FindStringExact(_Appointment.CityLocation);
+                } else
+                {
+                    rabVirtually.Checked = true;
+                    txtVirtualMeetingURL.Text = _Appointment.URL;
+                }
+                rtbAppointmentDetails.Text = _Appointment.Description;
+            }
         }
 
         private async Task SetCustomerList()
@@ -98,11 +126,11 @@ namespace WGUD969.Forms
             if (cmbCustomer.SelectedIndex < 0)
             {
                 validationErrors++;
-                cmbCustomer.BackColor = Color.Salmon;
+                lblCustomerForm.ForeColor = Color.Salmon;
             }
             else
             {
-                cmbCustomer.BackColor = SystemColors.Window;
+                lblCustomerForm.ForeColor = Color.Black;
             }
 
             if (new DayOfWeek[] { DayOfWeek.Saturday, DayOfWeek.Sunday }.Contains(dtpDate.Value.DayOfWeek))

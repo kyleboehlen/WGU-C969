@@ -61,6 +61,7 @@ namespace WGUD969.Models
             Type = dto.type;
             CityLocation = dto.location;
             URL = dto.url;
+            Description = dto.description;
             CreatedOn = dto.createDate;
             CreatedBy = dto.createdBy;
             UpdatedOn = dto.lastUpdate;
@@ -78,6 +79,7 @@ namespace WGUD969.Models
             appointmentDTO.type = Type;
             appointmentDTO.location = CityLocation;
             appointmentDTO.url = URL;
+            appointmentDTO.description = Description;
             appointmentDTO.createDate = CreatedOn;
             appointmentDTO.createdBy = CreatedBy;
             appointmentDTO.lastUpdate = UpdatedOn;

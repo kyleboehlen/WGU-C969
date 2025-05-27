@@ -287,8 +287,15 @@ namespace WGUD969.Forms
 
         private async void btnDeleteAppointment_Click(object sender, EventArgs e)
         {
-            await _AppointmentRepository.DeleteAsync((IAppointment) dgvAppointments.SelectedRows[0].Tag);
+            await _AppointmentRepository.DeleteAsync((IAppointment)dgvAppointments.SelectedRows[0].Tag);
             await RefreshAppointmentList(monthCalendar.SelectionStart);
+        }
+
+        private void btnEditAppointment_Click(object sender, EventArgs e)
+        {
+            AppointmentForm appointmentForm = _ServiceProvider.GetRequiredService<AppointmentForm>();
+            appointmentForm.SetAppointmentForEdit((IAppointment)dgvAppointments.SelectedRows[0].Tag);
+            appointmentForm.Show();
         }
     }
 }
