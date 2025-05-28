@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace WGUD969.Services
         private readonly IExceptionHandlingService _ExceptionHandler;
         private List<string> _Migrations;
         // This can be set to true to start with a fresh databse when running Up()
-        private readonly bool _DropAllTables = false;
+        private readonly bool _DropAllTables = true;
 
         public DatabaseMigrationService(IMySqlConnectionFactory connectionFactory, IExceptionHandlingService exceptionHandler)
         {
@@ -93,7 +94,12 @@ namespace WGUD969.Services
 
         public async Task UpAsync()
         {
-            if (_DropAllTables) { await DropAllTablesAsync(); }
+            // For making database modifications on the VM
+            if (_DropAllTables && !File.Exists("alreadydropped"))
+            {
+                await DropAllTablesAsync();
+                File.WriteAllText("alreadydropped", string.Empty);
+            }
 
             await ReadMigrations();
 
@@ -104,18 +110,41 @@ namespace WGUD969.Services
                     {
                         await connection.OpenAsync();
 
-                        await Task.WhenAll(_Migrations.Select(async query =>
+                        foreach (var query in _Migrations)
                         {
                             await using (var command = connection.CreateCommand())
                             {
-                                command.CommandText = query;
+                                // Check if this is a seeder query and replace placeholders
+                                var processedQuery = ProcessSeederQuery(query);
+                                Debug.WriteLine(processedQuery);
+                                command.CommandText = processedQuery;
                                 await command.ExecuteNonQueryAsync();
                             }
-                        }));
+                        }
                     }
                 },
                 "DataMigrationService.UpAsync()"
             );
+        }
+
+        private string ProcessSeederQuery(string query)
+        {
+            if (IsSeederQuery(query))
+            {
+                return query
+                    .Replace("@createdBy", "'test'")
+                    .Replace("@lastUpdatedBy", "'test'")
+                    .Replace("@seedDate", "'2019-01-01 00:00:00'")
+                    .Replace("@notNeeded", "'not needed'");
+            }
+            return query;
+        }
+
+        private bool IsSeederQuery(string query)
+        {
+            return query.Contains("@createdBy") ||
+                   query.Contains("@seedDate") ||
+                   query.Contains("@notNeeded");
         }
 
         public async Task DownAsync()
