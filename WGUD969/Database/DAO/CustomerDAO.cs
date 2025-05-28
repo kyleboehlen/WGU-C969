@@ -157,7 +157,7 @@ namespace WGUD969.Database.DAO
                         }
                     }
                 },
-                "AddressDAO.GetByIDAsync()"
+                "CustomerDAO.GetByIDAsync()"
             );
         }
 

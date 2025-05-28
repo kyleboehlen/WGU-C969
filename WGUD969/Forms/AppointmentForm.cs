@@ -155,7 +155,8 @@ namespace WGUD969.Forms
             }
 
             if (!_TimeZoneService.CheckIfDateTimeIsDuringBusinessHours(dtpStartTime.Value) ||
-                !_TimeZoneService.CheckIfDateTimeIsDuringBusinessHours(dtpEndTime.Value)) {
+                !_TimeZoneService.CheckIfDateTimeIsDuringBusinessHours(dtpEndTime.Value))
+            {
                 validationErrors++;
                 lblValidationError.Text = "Appt must occur during business hours (9-5 Mon-Fri EST)";
             }

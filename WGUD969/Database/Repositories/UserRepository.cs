@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using WGUD969.Database.DAO;
 using WGUD969.Database.DTO;
+using WGUD969.Factories;
 using WGUD969.Models;
 
 namespace WGUD969.Database.Repositories
@@ -15,15 +16,18 @@ namespace WGUD969.Database.Repositories
     {
         Task SetDefaultUserAsync(IUser user);
         Task<IUser?> GetUserByUsername(string username);
+        Task<IUser?> GetByIdAsync(int id);
     }
     public class UserRepository : IUserRepository
     {
+        private readonly IUserFactory _UserFactory;
         private readonly IDAO<UserDTO> _UserDAO;
         private readonly IServiceProvider _ServiceProvider;
-        public UserRepository(IDAO<UserDTO> userDAO, IServiceProvider serviceProvider)
+        public UserRepository(IDAO<UserDTO> userDAO, IServiceProvider serviceProvider, IUserFactory userFactory)
         {
             _UserDAO = userDAO;
             _ServiceProvider = serviceProvider;
+            _UserFactory = userFactory;
         }
 
         public async Task SetDefaultUserAsync(IUser user)
@@ -56,6 +60,18 @@ namespace WGUD969.Database.Repositories
             IUser user = _ServiceProvider.GetService<IUser>();
             user.Initialize(userDTO);
             return user;
+        }
+
+        public async Task<IUser?> GetByIdAsync(int id)
+        {
+            UserDTO? userDTO = await _UserDAO.GetByIdAsync(id);
+            if (userDTO != null)
+            {
+                IUser user = _ServiceProvider.GetService<IUser>();
+                user.Initialize(userDTO);
+                return user;
+            }
+            return null;
         }
     }
 }

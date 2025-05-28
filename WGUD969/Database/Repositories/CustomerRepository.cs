@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using WGUD969.Database.DAO;
 using WGUD969.Database.DTO;
 using WGUD969.Factories;
@@ -95,7 +96,14 @@ namespace WGUD969.Database.Repositories
 
         public async Task<ICustomer> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            CustomerDTO? customerDTO = await _CustomerDAO.GetByIdAsync(id);
+            if (customerDTO != null)
+            {
+                ICustomer customer = _CustomerFactory.GetDefaultModel();
+                customer.Initialize(customerDTO);
+                return customer;
+            }
+            return null;
         }
     }
 }

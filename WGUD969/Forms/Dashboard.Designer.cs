@@ -59,11 +59,19 @@
             btnCustomerSave = new Button();
             btnAddCustomer = new Button();
             tbpReports = new TabPage();
+            btnRunCustomerReport = new Button();
+            btnRunUserReport = new Button();
+            btnRunMonthReport = new Button();
+            dgvReport = new DataGridView();
+            Key = new DataGridViewTextBoxColumn();
+            Value = new DataGridViewTextBoxColumn();
             tbcMainView.SuspendLayout();
             tbpAppointments.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvAppointments).BeginInit();
             tbpCustomers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvCustomers).BeginInit();
+            tbpReports.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvReport).BeginInit();
             SuspendLayout();
             // 
             // tbcMainView
@@ -361,12 +369,75 @@
             // 
             // tbpReports
             // 
+            tbpReports.Controls.Add(btnRunCustomerReport);
+            tbpReports.Controls.Add(btnRunUserReport);
+            tbpReports.Controls.Add(btnRunMonthReport);
+            tbpReports.Controls.Add(dgvReport);
             tbpReports.Location = new Point(4, 24);
             tbpReports.Name = "tbpReports";
             tbpReports.Size = new Size(722, 246);
             tbpReports.TabIndex = 2;
             tbpReports.Text = "Reports";
             tbpReports.UseVisualStyleBackColor = true;
+            // 
+            // btnRunCustomerReport
+            // 
+            btnRunCustomerReport.Location = new Point(3, 57);
+            btnRunCustomerReport.Name = "btnRunCustomerReport";
+            btnRunCustomerReport.Size = new Size(262, 23);
+            btnRunCustomerReport.TabIndex = 15;
+            btnRunCustomerReport.TabStop = false;
+            btnRunCustomerReport.Text = "Run Customer Report";
+            btnRunCustomerReport.UseVisualStyleBackColor = true;
+            btnRunCustomerReport.Click += btnRunCustomerReport_Click;
+            // 
+            // btnRunUserReport
+            // 
+            btnRunUserReport.Location = new Point(3, 86);
+            btnRunUserReport.Name = "btnRunUserReport";
+            btnRunUserReport.Size = new Size(262, 23);
+            btnRunUserReport.TabIndex = 14;
+            btnRunUserReport.TabStop = false;
+            btnRunUserReport.Text = "Run User Report";
+            btnRunUserReport.UseVisualStyleBackColor = true;
+            btnRunUserReport.Click += btnRunUserReport_Click;
+            // 
+            // btnRunMonthReport
+            // 
+            btnRunMonthReport.Location = new Point(3, 28);
+            btnRunMonthReport.Name = "btnRunMonthReport";
+            btnRunMonthReport.Size = new Size(262, 23);
+            btnRunMonthReport.TabIndex = 13;
+            btnRunMonthReport.TabStop = false;
+            btnRunMonthReport.Text = "Run Month Report";
+            btnRunMonthReport.UseVisualStyleBackColor = true;
+            btnRunMonthReport.Click += btnRunMonthReport_Click;
+            // 
+            // dgvReport
+            // 
+            dgvReport.AllowUserToAddRows = false;
+            dgvReport.AllowUserToDeleteRows = false;
+            dgvReport.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvReport.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvReport.Columns.AddRange(new DataGridViewColumn[] { Key, Value });
+            dgvReport.Location = new Point(271, 3);
+            dgvReport.Name = "dgvReport";
+            dgvReport.ReadOnly = true;
+            dgvReport.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvReport.Size = new Size(448, 234);
+            dgvReport.TabIndex = 12;
+            // 
+            // Key
+            // 
+            Key.HeaderText = "Key";
+            Key.Name = "Key";
+            Key.ReadOnly = true;
+            // 
+            // Value
+            // 
+            Value.HeaderText = "Value";
+            Value.Name = "Value";
+            Value.ReadOnly = true;
             // 
             // Dashboard
             // 
@@ -385,6 +456,8 @@
             tbpCustomers.ResumeLayout(false);
             tbpCustomers.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvCustomers).EndInit();
+            tbpReports.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvReport).EndInit();
             ResumeLayout(false);
         }
 
@@ -421,5 +494,11 @@
         private DataGridViewTextBoxColumn Customer;
         private DataGridViewTextBoxColumn From;
         private DataGridViewTextBoxColumn To;
+        private Button btnRunMonthReport;
+        private DataGridView dgvReport;
+        private DataGridViewTextBoxColumn Key;
+        private DataGridViewTextBoxColumn Value;
+        private Button btnRunCustomerReport;
+        private Button btnRunUserReport;
     }
 }

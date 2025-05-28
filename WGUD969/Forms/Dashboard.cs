@@ -297,5 +297,44 @@ namespace WGUD969.Forms
             appointmentForm.SetAppointmentForEdit((IAppointment)dgvAppointments.SelectedRows[0].Tag);
             appointmentForm.Show();
         }
+
+        private async void btnRunMonthReport_Click(object sender, EventArgs e)
+        {
+            dgvReport.Rows.Clear();
+            foreach (KeyValuePair<string, int> kvp in await _AppointmentService.GetNumberOfAppointmentsByMonth())
+            {
+                int rowIndex = dgvReport.Rows.Add();
+                DataGridViewRow row = dgvReport.Rows[(int)rowIndex];
+                row.Cells["Key"].Value = kvp.Key;
+                row.Cells["Value"].Value = kvp.Value;
+            }
+        }
+
+        private async void btnRunCustomerReport_Click(object sender, EventArgs e)
+        {
+            dgvReport.Rows.Clear();
+            foreach (KeyValuePair<ICustomer, int> kvp in await _AppointmentService.GetNumberOfAppointmentsByCustomer())
+            {
+                int rowIndex = dgvReport.Rows.Add();
+                DataGridViewRow row = dgvReport.Rows[(int)rowIndex];
+                row.Cells["Key"].Value = kvp.Key.Name;
+                row.Cells["Value"].Value = kvp.Value;
+            }
+        }
+
+        private async void btnRunUserReport_Click(object sender, EventArgs e)
+        {
+            dgvReport.Rows.Clear();
+            foreach (KeyValuePair<IUser, List<IAppointment>> kvp in await _AppointmentService.GetAppointmentsByUser())
+            {
+                foreach (IAppointment a in kvp.Value)
+                {
+                    int rowIndex = dgvReport.Rows.Add();
+                    DataGridViewRow row = dgvReport.Rows[(int)rowIndex];
+                    row.Cells["Key"].Value = kvp.Key.Username;
+                    row.Cells["Value"].Value = $"{a.Type} at {a.Start.ToString()}";
+                }
+            }
+        }
     }
 }

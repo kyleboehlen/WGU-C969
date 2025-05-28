@@ -23,15 +23,17 @@ namespace WGUD969.Forms
         private readonly ITranslationService _Translator;
         private readonly IAuthService _AuthService;
         private readonly IServiceProvider _ServiceProvider;
+        private readonly IAppointmentService _AppointmentService;
         private IUserLocation _UserLocation;
         private Dictionary<string, Language> _LanguageLabels = new Dictionary<string, Language>();
-        public Login(ILocationService locationService, ITranslationService translator, IAuthService authService, IServiceProvider serviceProvider)
+        public Login(ILocationService locationService, ITranslationService translator, IAuthService authService, IServiceProvider serviceProvider, IAppointmentService appointmentService)
         {
             // Set dependencies
             _LocationService = locationService;
             _Translator = translator;
             _AuthService = authService;
             _ServiceProvider = serviceProvider;
+            _AppointmentService = appointmentService;
 
             InitializeLanguages();
             InitializeComponent();
@@ -96,6 +98,10 @@ namespace WGUD969.Forms
             }
             else
             {
+                if (await _AppointmentService.HasAppointmentWithin15Minutes())
+                {
+                    MessageBox.Show("You have an appointment within 15 minutes!", "Appointment Imminent", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
                 _ServiceProvider.GetRequiredService<Dashboard>().Show();
                 Hide();
             }
